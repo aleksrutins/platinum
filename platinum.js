@@ -121,6 +121,8 @@ class TextSprite {
     this.el.innerHTML = text;
   }
 }
+window.TextSprite = TextSprite;
+TextSprite._elType = 'span';
 class GameArea extends HTMLElement {
   constructor() {
     super();
