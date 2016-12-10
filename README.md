@@ -23,7 +23,7 @@ create a new file called __index.html__ and put the following code in it:
   &lt;/html&gt;
 </pre>
 ### Step 2: create the JavaScript
-create **another** file called __app.js__, and put the following code in it:
+create *another* file called __app.js__, and put the following code in it:
 <pre>
   (game => {
     game.getSprite('mytext').setText('This has been changed');
