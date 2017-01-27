@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 1760 1100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style id="bx-google-fonts">@import url(https://fonts.googleapis.com/css?family=ABeeZee:400,400italic|Roboto:100,300,500,700,900,100italic,300italic,400,400italic,500italic,700italic,900italic);</style>
+  </defs>
+  <rect x="68.732" y="230.497" width="1574.044" height="408.426" style="fill: rgb(234, 18, 18);"/>
+  <text x="149.591" y="373.876" style="font-family: ABeeZee; font-size: 110px; white-space: pre;">You have placed 25 blocks!</text>
+  <text x="602.978" y="515.372" style="font-size: 36; font-family: Roboto; white-space: pre;">Click this message to play again!</text>
+</svg>

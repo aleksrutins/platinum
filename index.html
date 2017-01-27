@@ -1,0 +1,24 @@
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <title>JSCraft</title>
+    <script src='../platinum-loader.js'></script>
+    <script src='../platinum-objects.js'></script>
+    <script src='../platinum.js'></script>
+    <script src='./jscraft.js'></script>
+  </head>
+  <body style='width: 100% !important; height: 100% !important;'>
+    <game-area ref='JSCraft' size='1000, 1000'>
+      <game-sprite type='ImageSprite' name='placeholderWin' attrs='"./window.svg", "", fw, fh' style='height: 100%; width: 100%;' untouchable></game-sprite>
+      <!--<game-sprite type='ImageSprite' name='player' attrs='"./player.svg", "[player]", 100, 100'></game-sprite>-->
+      <!--<game-sprite type='ButtonSprite' name='refreshBtn' attrs='"Refresh"'></game-sprite>-->
+    </game-area>
+    <div style='border: 4px dashed black; float: right;' id='hints'>
+      <h2>Hints</h2>
+      <p>Click anywhere on the screen to place a block.</p>
+      <small>blocks left: <span id='counter'>25</span></small>
+    </div>
+  </body>
+</html>
