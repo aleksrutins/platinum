@@ -5,22 +5,8 @@
     var domCounter = document.getElementById('counter');
     var bi = 0;
     var yv = {};
-    var timer;
-    var gravity = () => {
-      for(let sprite of game.sprites) {
-        if(sprite.touchable) {
-          if((sprite.getY() + 124) < WindowManager.getWindowDimensions().height && !sprite.detectCollisionRect()) {
-            sprite.setY(sprite.getY() + -(yv[sprite.name]));
-            yv[sprite.name] -= .5;
-          } else {
-            yv[sprite.name] = 0;
-          }
-        }
-      }
-    };
-    timer = setInterval(() => {
-      gravity();
-    }, 100);
+    var gravityManager = new Platinum.GravityManager(game);
+    gravityManager.startGravity();
     win.style.zIndex = '-1';
     game.getWin().addEventListener('click', e => {
       var x = e.offsetX;
@@ -33,7 +19,7 @@
       hintsBox.style.zIndex = (bi + 1).toString();
       bi++;
       if(bi == 25 || bi > 25) {
-        clearInterval(timer);
+        gravityManager.pauseGravity();
         //game.clear();
         var ohhb = game.addSprite('100blocks', 'ImageSprite', true, 'win.svg', 'You have placed 25 blocks!', 1000, 500);
         ohhb._el.style.zIndex = 26;
