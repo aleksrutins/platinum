@@ -19,7 +19,7 @@
       hintsBox.style.zIndex = (bi + 1).toString();
       bi++;
       if(bi == 25 || bi > 25) {
-        gravityManager.pauseGravity();
+        gravityManager.stopGravity();
         //game.clear();
         var ohhb = game.addSprite('100blocks', 'ImageSprite', true, 'win.svg', 'You have placed 25 blocks!', 1000, 500);
         ohhb._el.style.zIndex = 26;
