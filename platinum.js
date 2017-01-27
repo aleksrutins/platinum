@@ -1,5 +1,5 @@
 // (C) 2016 munchkinhalfling <munchkin@rutins.com>
-
+var Platinum = Platinum || {};
 Object.prototype[Symbol.iterator] = function *() {
   for(let prop in this) {
     yield this[prop];
