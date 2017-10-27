@@ -1,6 +1,6 @@
 ((game) => {
   game.onReady(function() {
-    var win = document.getElementById('placeholderWin')
+    var win = game.getSprite('placeholderWin')
     var hintsBox = document.getElementById('hints');
     var domCounter = document.getElementById('counter');
     var bi = 0;
