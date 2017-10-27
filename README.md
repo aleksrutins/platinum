@@ -36,3 +36,4 @@ Enable it.
 ### Step 4: Yer done, so run it!
 Now, open up index.html in Chrome, and you should see a piece of text in the top-left corner that says 'This has been changed.'<br/>
 That's all, Folks!
+Also, check this out: [JSCraft](https://munchkinhalfling.github.io/platinumjs/jscraft-demo)
