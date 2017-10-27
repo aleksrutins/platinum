@@ -7,7 +7,7 @@
     var yv = {};
     var gravityManager = new Platinum.GravityManager(game);
     gravityManager.startGravity();
-    win.style.zIndex = '-1';
+    win._el.style.zIndex = '-1';
     game.getWin().addEventListener('click', e => {
       var x = e.offsetX;
       var y = e.offsetY;
