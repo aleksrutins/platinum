@@ -149,7 +149,7 @@ class SpriteElement extends HTMLElement {
     super();
   }
   connectedCallback() {
-    this.game = this.parentElement._game
+    this.game = this.parentElement;
     var el = document.createElement(ImageSprite._elType);
     this.sprite = new ImageSprite(el, this.getAttribute('name'), this.game, false, !this.hasAttribute('untouchable'), this.getAttribute('image'), this.getAttribute('alt'), ...eval('[' + this.getAttribute('size') + ']'));
     this.game.sprites[this.getAttribute('name')] = this.sprite;
