@@ -1,13 +1,13 @@
 ((game) => {
   game.onReady(function() {
-    var win = game.getSprite('placeholderWin')
+    //var win = game.getSprite('placeholderWin')
     var hintsBox = document.getElementById('hints');
     var domCounter = document.getElementById('counter');
     var bi = 0;
     var yv = {};
     var gravityManager = new Platinum.GravityManager(game);
     gravityManager.startGravity();
-    win._el.style.zIndex = '-1';
+    //win._el.style.zIndex = '-1';
     game.getWin().addEventListener('click', e => {
       var x = e.offsetX;
       var y = e.offsetY;
