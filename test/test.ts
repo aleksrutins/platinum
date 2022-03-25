@@ -1,45 +1,90 @@
 import * as platinum from '../mod.ts';
 
+class Player extends platinum.ecs.Entity {
+    constructor(private camera: platinum.s2d.CameraEntity2D, transform: platinum.s2d.Transform2D) {
+        super("player");
+        this.attach(transform);
+        this.attach(new platinum.s2d.CollisionBox2D(platinum.s2d.CollisionType.Movable, 32, 32));
+        platinum.image.loadBitmap('sprite.png').then(bmp => {
+            this.attach(new platinum.s2d.Sprite2D(bmp));
+        });
+    }
+
+    update(systems: platinum.ecs.System[]) {
+        const transform = this.getComponent(platinum.s2d.Transform2D)!;
+        if(keyboard.isDown('ArrowDown')) {
+            transform.y += 4;
+        } else if(keyboard.isDown('ArrowUp')) {
+            transform.y -= 4;
+        }
+        if(keyboard.isDown('ArrowLeft')) {
+            transform.x -= 4;
+        } else if(keyboard.isDown('ArrowRight')) {
+            transform.x += 4;
+        }
+        this.camera.follow(transform);
+        super.update(systems);
+    }
+}
+
 let game = new platinum.Game;
+
+game.use(new platinum.s2d.RenderSystem2D(document.querySelector('#game')!));
 
 let keyboard = game.useExt(platinum.input.keyboard.KeyboardManager);
 
-game.use(new platinum.s2d.RenderSystem2D(document.querySelector("#game")!));
-let player = new platinum.ecs.Entity("player");
-player.attach(new platinum.s2d.Transform2D(10, 10));
-player.attach(new platinum.s2d.CollisionBox2D(platinum.s2d.CollisionType.Movable, 32, 32));
-
-let box = new platinum.ecs.Entity("box");
-box.attach(new platinum.s2d.Transform2D(200, 200));
-box.attach(new platinum.s2d.CollisionBox2D(platinum.s2d.CollisionType.Solid, 32, 32));
-
-let img = new Image();
-img.addEventListener('load', async () => player.attach(new platinum.s2d.Sprite2D(await createImageBitmap(img))));
-img.src = "sprite.png";
-
-let img2 = new Image();
-img2.addEventListener('load', async () => box.attach(new platinum.s2d.Sprite2D(await createImageBitmap(img2))));
-img2.src = "thingy.png";
-
 let camera = new platinum.s2d.CameraEntity2D("camera", 640, 480);
 
-game.add(player);
-game.add(box);
+const level: platinum.s2d.level.Level = {
+    name: "main",
+    tiles: [
+        {
+            index: 0,
+            x: 50,
+            y: 50,
+            collisionType: 'Solid'
+        },
+        {
+            index: 1,
+            x: 50 + 32,
+            y: 50,
+            collisionType: 'Solid'
+        },
+        {
+            index: 0,
+            x: 50 + 64,
+            y: 50 + 64,
+            collisionType: 'Solid'
+        }
+    ],
+    entities: [
+        {
+            name: 'player',
+            x: 0,
+            y: 0
+        }
+    ]
+}
+
+const tilemap = await platinum.image.load('tilemap.png');
+
+game.addAll(await platinum.s2d.level.LevelLoader.load(level, {
+    image: tilemap,
+    tileHeight: 32,
+    tileWidth: 32,
+    rows: 2,
+    cols: 1,
+}, (name, pos) => {
+    switch(name) {
+        case 'player':
+            return new Player(camera, pos);
+    }
+}))
+
 game.add(camera);
 
 game.getSystem(platinum.s2d.RenderSystem2D)!.clearColor = 'yellow';
 
 game.mainLoop(() => {
-    const transform = player.getComponent(platinum.s2d.Transform2D)!;
-    if(keyboard.isDown('ArrowDown')) {
-        transform.y += 4;
-    } else if(keyboard.isDown('ArrowUp')) {
-        transform.y -= 4;
-    }
-    if(keyboard.isDown('ArrowLeft')) {
-        transform.x -= 4;
-    } else if(keyboard.isDown('ArrowRight')) {
-        transform.x += 4;
-    }
-    camera.follow(transform);
+    
 });

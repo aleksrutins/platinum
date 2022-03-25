@@ -20,6 +20,11 @@ export class Game {
         this.#entities.push(entity);
         entity.init(this.#systems);
     }
+    addAll(entities: Entity[]) {
+        for(const e of entities) {
+            this.add(e);
+        }
+    }
     updateAll() {
         for(const system of this.#systems) {
             try {
