@@ -1,12 +1,13 @@
 import {Type} from './internal/types.ts';
 import { MessageReceiver, pingAll } from './messaging.ts';
+import { Game } from './game.ts';
 
 export type Message<T, A> = keyof {
     [Prop in keyof T]: T[Prop] extends (_: A) => void ? T[Prop] : undefined;
 }
 
 export interface System {
-    init(): void;
+    init(game: Game): void;
     update(): void;
 }
 

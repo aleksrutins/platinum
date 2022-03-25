@@ -9,7 +9,7 @@ export class Game {
     }
     use<T extends System>(system: T) {
         this.#systems.push(system);
-        system.init();
+        system.init(this);
     }
     useExt<T extends GameExtension>(tExt: Type<T>) {
         const ext = new tExt;
@@ -41,6 +41,10 @@ export class Game {
         for(const entity of this.#entities) {
             if(entity instanceof t && entity.name == name) return entity;
         }
+    }
+
+    getWhere(predicate: (e: Entity) => boolean): Entity[] {
+        return this.#entities.filter(predicate);
     }
 
     getSystem<T extends System>(t: Type<T>): Nullable<T> {
