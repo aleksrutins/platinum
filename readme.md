@@ -3,7 +3,7 @@ An ECS-based game engine for TypeScript and Deno.
 
 ## Checklist
 - [x] Sprites
-- [-] Collisions *(could use some work)*
+- [x] Collisions *(could use some work)*
 - [x] Camera
 - [x] Tilemaps
 - [x] Levels
