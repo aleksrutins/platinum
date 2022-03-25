@@ -21,8 +21,11 @@ let img2 = new Image();
 img2.addEventListener('load', async () => box.attach(new platinum.s2d.Sprite2D(await createImageBitmap(img2))));
 img2.src = "thingy.png";
 
+let camera = new platinum.s2d.CameraEntity2D("camera", 640, 480);
+
 game.add(player);
 game.add(box);
+game.add(camera);
 
 game.getSystem(platinum.s2d.RenderSystem2D)!.clearColor = 'yellow';
 
@@ -38,4 +41,5 @@ game.mainLoop(() => {
     } else if(keyboard.isDown('ArrowRight')) {
         transform.x += 4;
     }
+    camera.follow(transform);
 });

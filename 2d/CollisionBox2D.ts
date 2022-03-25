@@ -36,7 +36,7 @@ export class CollisionBox2D extends Component<RenderSystem2D> {
         const transform = this.getComponent(Transform2D);
         if(transform == null) return;
         if(this.type == CollisionType.Movable) {
-            const otherBoxes = system.game!.getWhere(e => e != this.entity && e.getComponent(CollisionBox2D) != null).map(e => e.getComponent(CollisionBox2D));
+            const otherBoxes = system.game!.getWhere(e => e != this.entity && e.hasComponent(CollisionBox2D)).map(e => e.getComponent(CollisionBox2D));
             for(const box of otherBoxes) {
                 if(box && box?.type != CollisionType.PassThrough && !isNaN(this.overlaps(box)[0]) && !isNaN(this.overlaps(box)[1])) {
                     const [xOverlap, yOverlap] = this.overlaps(box);

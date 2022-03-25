@@ -40,6 +40,13 @@ export class Entity {
         }
     }
 
+    hasComponent<S extends System, T extends Component<S>>(t: Type<T>): boolean {
+        for(const c of this.#components) {
+            if(c instanceof t) return true;
+        }
+        return false;
+    }
+
     init(systems: System[]) {
         pingAll(this.#components, 'init', systems, (r, d) => r.canUse(d));
     }
@@ -66,6 +73,9 @@ export abstract class Component<T extends System> implements MessageReceiver<'in
     abstract update(system: T): void;
     getComponent<S extends System, T extends Component<S>>(t: Type<T>): T | undefined {
         return this.entity?.getComponent(t);
+    }
+    hasComponent<S extends System, T extends Component<S>>(t: Type<T>): boolean {
+        return this.entity?.hasComponent(t) ?? false;
     }
 }
 

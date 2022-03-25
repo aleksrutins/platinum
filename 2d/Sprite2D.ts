@@ -14,6 +14,6 @@ export class Sprite2D extends Component<RenderSystem2D> {
     }
     update(system: RenderSystem2D): void {
         const transform = this.getComponent(Transform2D);
-        system.ctx.drawImage(this.img, transform!.x, transform!.y, this.img.width * this.scale, this.img.height * this.scale);
+        system.ctx.drawImage(this.img, transform!.actX, transform!.actY, this.img.width * this.scale, this.img.height * this.scale);
     }
 }
