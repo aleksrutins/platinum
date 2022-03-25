@@ -3,30 +3,92 @@ import { CollisionBox2D, CollisionType } from "../CollisionBox2D.ts";
 import { Sprite2D } from "../Sprite2D.ts";
 import { Transform2D } from '../Transform2D.ts';
 
+/**
+ * A level.
+ */
 export interface Level {
+    /**
+     * The name of the level.
+     */
     name: string,
+    /**
+     * Tiles in the level.
+     */
     tiles: {
+        /**
+         * The index of the tile in the tilemap.
+         */
         index: number,
+        /**
+         * The X position on the screen of the tile.
+         */
         x: number,
+        /**
+         * The Y position on the screen of the tile.
+         */
         y: number,
+        /**
+         * How to behave in collisions.
+         * @see s2d.CollisionBox2D
+         */
         collisionType: 'Solid' | 'Movable' | 'PassThrough'
     }[],
+    /**
+     * Entities to be handled by the `entityCallback` passed to `LevelLoader.load`.
+     */
     entities: {
+        /**
+         * The name of the entity.
+         */
         name: string,
+        /**
+         * The X position on screen of the entity.
+         */
         x: number,
+        /**
+         * The Y position on screen of the entity.
+         */
         y: number
     }[]
 }
 
+/**
+ * Information about a tilemap.
+ */
 export type TilemapInfo = {
+    /**
+     * The image containing the tilemap.
+     */
     image: ImageBitmapSource,
+    /**
+     * The number of rows in the the tilemap.
+     */
     rows: number,
+    /**
+     * The number of columns in the tilemap.
+     */
     cols: number,
+    /**
+     * The width of each tile.
+     */
     tileWidth: number,
+    /**
+     * The height of each tile.
+     */
     tileHeight: number
 }
 
+/**
+ * Utilities for loading levels.
+ */
 export class LevelLoader {
+    /**
+     * Loads a level.
+     * @param level The Level to load.
+     * @param tilemap The TilemapInfo to use for loading the level's tiles.
+     * @param entityCallback The callback used to handle entities.
+     * @returns An array of entities for the level.
+     */
     static async load(level: Level, tilemap: TilemapInfo, entityCallback: (name: string, position: Transform2D) => (Entity | null | undefined)): Promise<Entity[]> {
         const entities: Entity[] = [];
         for(const tile of level.tiles) {

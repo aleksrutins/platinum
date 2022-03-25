@@ -6,6 +6,10 @@ function lerp(a: number, b: number, t: number): number {
     return a + t * (b - a);
 }
 
+/**
+ * A component for a camera. Do not use directly.
+ * Requires Transform2D.
+ */
 export class Camera2D extends Component<RenderSystem2D> {
   constructor() {
     super();
@@ -24,12 +28,26 @@ export class Camera2D extends Component<RenderSystem2D> {
   }
 }
 
+/**
+ * An entity to manage a `Camera2D`.
+ */
 export class CameraEntity2D extends Entity {
+    /**
+     * @param name The name of this entity.
+     * @param sceneWidth The width of the scene.
+     * @param sceneHeight The height of the scene.
+     */
     constructor(name: string, private sceneWidth: number, private sceneHeight: number) {
         super(name);
         this.attach(new Transform2D(0, 0));
         this.attach(new Camera2D);
     }
+
+    /**
+     * Updates the transform of `this` to match `thing`, with linear interpolation.
+     * @param thing The transformation of the object to follow.
+     * @param lerpFactor The coefficient for linear interpolation.
+     */
     follow(thing: Transform2D, lerpFactor = 0.1) {
         const transform = this.getComponent(Transform2D)!;
         const modified = thing.add([-this.sceneWidth/2, -this.sceneHeight/2]);

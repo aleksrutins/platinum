@@ -1,5 +1,26 @@
 import {GameExtension} from '../extension/mod.ts';
 import { Game } from "../game.ts";
+
+/**
+ * An extension for handling keyboard input.
+ * 
+ * @example
+ * let keyboard = game.useExt(platinum.input.keyboard.KeyboardManager);
+ * 
+ * // ...
+ * 
+ * game.mainLoop(() => {
+ * 
+ *     // ...
+ * 
+ *     if(keyboard.isDown('Space')) {
+ *         // Do something
+ *     }
+ * 
+ *     // ...
+ * 
+ * });
+ */
 export class KeyboardManager implements GameExtension {
     #down: Set<string> = new Set();
     connect(_game: Game): void {
@@ -10,6 +31,12 @@ export class KeyboardManager implements GameExtension {
             this.#down.delete(ev.key);
         });
     }
+
+    /**
+     * Checks whether a key is down.
+     * @param key The key to check.
+     * @returns Whether or not {@code key} is down.
+     */
     isDown(key: string) {
         return this.#down.has(key);
     }
