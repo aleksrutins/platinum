@@ -4,23 +4,23 @@ class Player extends platinum.ecs.Entity {
     constructor(private camera: platinum.s2d.CameraEntity2D, transform: platinum.s2d.Transform2D) {
         super("player");
         this.attach(transform);
-        this.attach(new platinum.s2d.CollisionBox2D(platinum.s2d.CollisionType.Movable, 32, 32));
+        this.attach(new platinum.s2d.CollisionBox2D(platinum.s2d.CollisionType.Movable, 24, 24));
         platinum.image.loadBitmap('sprite.png').then(bmp => {
-            this.attach(new platinum.s2d.Sprite2D(bmp));
+            this.attach(new platinum.s2d.Sprite2D(bmp, 0.75));
         });
     }
 
     update(systems: platinum.ecs.System[]) {
         const transform = this.getComponent(platinum.s2d.Transform2D)!;
         if(keyboard.isDown('ArrowDown')) {
-            transform.y += 4;
+            transform.translate([0, 4]);
         } else if(keyboard.isDown('ArrowUp')) {
-            transform.y -= 4;
+            transform.translate([0, -4]);
         }
         if(keyboard.isDown('ArrowLeft')) {
-            transform.x -= 4;
+            transform.translate([-4, 0]);
         } else if(keyboard.isDown('ArrowRight')) {
-            transform.x += 4;
+            transform.translate([4, 0]);
         }
         this.camera.follow(transform);
         super.update(systems);

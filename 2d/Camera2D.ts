@@ -1,4 +1,5 @@
 import { Component, Entity, System } from "../ecs.ts";
+import { Vec2 } from "../math/vectors.ts";
 import { RenderSystem2D } from "./RenderSystem2D.ts";
 import { Transform2D } from "./Transform2D.ts";
 
@@ -50,8 +51,10 @@ export class CameraEntity2D extends Entity {
      */
     follow(thing: Transform2D, lerpFactor = 0.1) {
         const transform = this.getComponent(Transform2D)!;
-        const modified = thing.add([-this.sceneWidth/2, -this.sceneHeight/2]);
-        transform.x = lerp(transform.x, modified.x, lerpFactor);
-        transform.y = lerp(transform.y, modified.y, lerpFactor);
+        const modified = Vec2.add(thing.position, [-this.sceneWidth/2, -this.sceneHeight/2]);
+        transform.position = [
+          lerp(transform.x, modified[0], lerpFactor),
+          lerp(transform.y, modified[1], lerpFactor)
+        ];
     }
 }

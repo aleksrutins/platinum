@@ -52,14 +52,8 @@ export class CollisionBox2D extends Component<RenderSystem2D> {
         if(this.type == CollisionType.Movable) {
             const otherBoxes = system.game!.getWhere(e => e != this.entity && e.hasComponent(CollisionBox2D)).map(e => e.getComponent(CollisionBox2D));
             for(const box of otherBoxes) {
-                if(box && box?.type != CollisionType.PassThrough && !isNaN(this.overlaps(box)[0]) && !isNaN(this.overlaps(box)[1])) {
-                    const [xOverlap, yOverlap] = this.overlaps(box);
-                    console.log(xOverlap, yOverlap);
-                    if(xOverlap < yOverlap && xOverlap != 0) {
-                        transform.x += xOverlap;
-                    } else {
-                        transform.y += yOverlap;
-                    }
+                if(box && box?.type != CollisionType.PassThrough && this.overlaps(box)) {
+                    while(this.overlaps(box)) transform.rollback();
                 }
             }
         }
@@ -82,11 +76,11 @@ export class CollisionBox2D extends Component<RenderSystem2D> {
      * @param otherBox The other CollisionBox2D.
      * @returns Whether or not `this` and `otherBox` overlap.
      */
-    overlaps(otherBox: CollisionBox2D): Vec2 {
+    overlaps(otherBox: CollisionBox2D): boolean {
         const thisTransform = this.getComponent(Transform2D);
         const otherTransform = otherBox.getComponent(Transform2D);
-        if(!thisTransform || !otherTransform) return [NaN, NaN];
-        if(otherBox == this) return [NaN, NaN];
+        if(!thisTransform || !otherTransform) return false;
+        if(otherBox == this) return false;
 
         // see https://gamedev.stackexchange.com/a/169234 and https://silentmatt.com/rectangle-intersection/
 
@@ -94,32 +88,8 @@ export class CollisionBox2D extends Component<RenderSystem2D> {
             && (thisTransform.x + this.width) > otherTransform.x
             && thisTransform.y < (otherTransform.y + otherBox.height)
             && (thisTransform.y + this.height) > otherTransform.y
-            )) return [NaN, NaN]; // no collision
+            )) return false; // no collision
         
-        if(this.overlapsPoint(otherTransform.x, otherTransform.y)) {
-            return [
-                otherTransform.x - (thisTransform.x + this.width),
-                otherTransform.y - (thisTransform.y + this.height)
-            ]
-        }
-        if(this.overlapsPoint(otherTransform.x + otherBox.width, otherTransform.y + otherBox.height)) {
-            return [
-                (otherTransform.x + otherBox.width) - thisTransform.x,
-                (otherTransform.y + otherBox.height) - thisTransform.y
-            ]
-        }
-        if(this.overlapsPoint(otherTransform.x + otherBox.width, otherTransform.y)) {
-            return [
-                (otherTransform.x + otherBox.width) - thisTransform.x,
-                otherTransform.y - (thisTransform.y + this.height)
-            ]
-        }
-        if(this.overlapsPoint(otherTransform.x, otherTransform.y + otherBox.height)) {
-            return [
-                otherTransform.x - (thisTransform.x + this.width),
-                (otherTransform.y + otherBox.height) - thisTransform.y
-            ]
-        }
-        return [NaN, NaN];
+        return true;
     }
 }
