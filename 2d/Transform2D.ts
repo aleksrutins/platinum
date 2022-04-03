@@ -10,6 +10,9 @@ export class Transform2D extends Component<RenderSystem2D> {
   public xMod = 0;
   /** The modifier to be applied to the Y position. Used by Camera2D. */
   public yMod = 0;
+
+  /** Added to the current position at the beginning of every update. */
+  public delta: Vec2 = [0, 0];
   #x = 0
   #y = 0
   #history: Vec2[] = []
@@ -28,6 +31,7 @@ export class Transform2D extends Component<RenderSystem2D> {
   init(_system: RenderSystem2D): void {
   }
   update(_system: RenderSystem2D): void {
+    this.translate(this.delta);
   }
 
   /** The modified X position. */

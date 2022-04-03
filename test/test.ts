@@ -1,21 +1,24 @@
 import * as platinum from '../mod.ts';
+import Transform2D = platinum.s2d.Transform2D;
+import s2d = platinum.s2d;
 
 class Player extends platinum.ecs.Entity {
-    constructor(private camera: platinum.s2d.CameraEntity2D, transform: platinum.s2d.Transform2D) {
+    constructor(private camera: platinum.s2d.CameraEntity2D, transform: Transform2D) {
         super("player");
+        this.attach(new s2d.PlatformerPhysics2D());
         this.attach(transform);
-        this.attach(new platinum.s2d.CollisionBox2D(platinum.s2d.CollisionType.Movable, 24, 24));
+        this.attach(new platinum.s2d.CollisionBox2D(platinum.s2d.CollisionType.DoNotAvoid, 24, 24));
         platinum.image.loadBitmap('sprite.png').then(bmp => {
             this.attach(new platinum.s2d.Sprite2D(bmp, 0.75));
         });
     }
 
     update(systems: platinum.ecs.System[]) {
-        const transform = this.getComponent(platinum.s2d.Transform2D)!;
-        if(keyboard.isDown('ArrowDown')) {
-            transform.translate([0, 4]);
-        } else if(keyboard.isDown('ArrowUp')) {
-            transform.translate([0, -4]);
+        const transform = this.getComponent(Transform2D)!;
+        const collision = this.getComponent(s2d.CollisionBox2D)!;
+        const platformer = this.getComponent(s2d.PlatformerPhysics2D)!;
+        if(keyboard.isDown('ArrowUp') && collision.hasCollision()) {
+            platformer.jump();
         }
         if(keyboard.isDown('ArrowLeft')) {
             transform.translate([-4, 0]);
@@ -42,25 +45,25 @@ const level: platinum.s2d.level.Level = {
             index: 0,
             x: 50,
             y: 50,
-            collisionType: 'Solid'
+            collisionType: 'DoNotAvoid'
         },
         {
             index: 1,
             x: 50 + 32,
             y: 50,
-            collisionType: 'Solid'
+            collisionType: 'DoNotAvoid'
         },
         {
             index: 0,
             x: 50 + 64,
             y: 50 + 64,
-            collisionType: 'Solid'
+            collisionType: 'DoNotAvoid'
         }
     ],
     entities: [
         {
             name: 'player',
-            x: 0,
+            x: 50,
             y: 0
         }
     ]

@@ -31,7 +31,7 @@ export interface Level {
          * How to behave in collisions.
          * @see s2d.CollisionBox2D
          */
-        collisionType: 'Solid' | 'Movable' | 'PassThrough'
+        collisionType: 'Solid' | 'Movable' | 'PassThrough' | 'DoNotAvoid'
     }[],
     /**
      * Entities to be handled by the `entityCallback` passed to `LevelLoader.load`.

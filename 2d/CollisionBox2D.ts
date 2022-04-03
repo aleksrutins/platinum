@@ -20,6 +20,10 @@ export enum CollisionType {
      * This object cannot be moved and does not affect other objects.
      */
     PassThrough,
+    /**
+     * This object is still detected as a collision, but is not avoided with the built-in routines.
+     */
+    DoNotAvoid
 }
 
 /**
@@ -33,13 +37,15 @@ export class CollisionBox2D extends Component<RenderSystem2D> {
      * @param width The width of the collision box.
      * @param height The height of the collision box.
      */
+    #system?: RenderSystem2D;
     constructor(public type: CollisionType, public width = 0, public height = 0) {
         super();
     }
     canUse(system: System): system is RenderSystem2D {
         return system instanceof RenderSystem2D;
     }
-    init(_system: RenderSystem2D): void {
+    init(system: RenderSystem2D): void {
+        this.#system = system;
         const sprite = this.getComponent(Sprite2D)
         if(sprite && this.width == 0 && this.height == 0) {
             this.width = sprite.img.width * sprite.scale;
@@ -52,11 +58,22 @@ export class CollisionBox2D extends Component<RenderSystem2D> {
         if(this.type == CollisionType.Movable) {
             const otherBoxes = system.game!.getWhere(e => e != this.entity && e.hasComponent(CollisionBox2D)).map(e => e.getComponent(CollisionBox2D));
             for(const box of otherBoxes) {
-                if(box && box?.type != CollisionType.PassThrough && this.overlaps(box)) {
+                if(box && box?.type != CollisionType.PassThrough && box?.type != CollisionType.DoNotAvoid && this.overlaps(box)) {
                     while(this.overlaps(box)) transform.rollback();
                 }
             }
         }
+    }
+
+    hasCollision(): boolean {
+        if(!this.#system) return false;
+        const otherBoxes = this.#system.game!.getWhere(e => e != this.entity && e.hasComponent(CollisionBox2D)).map(e => e.getComponent(CollisionBox2D));
+        for(const box of otherBoxes) {
+            if(box && box?.type != CollisionType.PassThrough && this.overlaps(box)) {
+                return true;
+            }
+        }
+        return false;   
     }
 
     /**
