@@ -7,7 +7,7 @@ An ECS-based game engine for TypeScript and Deno.
 - [x] Camera
 - [x] Tilemaps
 - [x] Levels
-- [ ] Physics
+- [x] Physics *(very basic)*
 - [ ] Level editor
 - [ ] 3D?
 
