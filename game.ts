@@ -63,6 +63,9 @@ export class Game {
      */
     switchScene(scene: Scene) {
         this.#scene = scene;
+        for(let entity of this.#scene.entities) {
+            entity.init(this.#systems);
+        }
     }
     
     private updateAll() {
