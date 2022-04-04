@@ -7,7 +7,11 @@ import { Nullable, Type } from "./internal/types.ts";
  */
 export class Game {
     #systems: System[] = []
-    #entities: Entity[] = [];
+    #baseEntities: Entity[] = [];
+    #scene?: Scene;
+    get #entities() {
+        return [...this.#baseEntities, ...(this.#scene?.entities ?? [])];
+    }
 
     /**
      * Add a system to the game.
@@ -34,7 +38,7 @@ export class Game {
      * @param entity The entity to add.
      */
     add<T extends Entity>(entity: T) {
-        this.#entities.push(entity);
+        this.#baseEntities.push(entity);
         entity.init(this.#systems);
     }
 
@@ -46,6 +50,19 @@ export class Game {
         for(const e of entities) {
             this.add(e);
         }
+    }
+
+    /** Clear all entities from the game. */
+    clear() {
+        this.#baseEntities.splice(0, this.#entities.length);
+    }
+
+    /**
+     * Switches to the specified scene.
+     * @param scene The scene to switch to.
+     */
+    switchScene(scene: Scene) {
+        this.#scene = scene;
     }
     
     private updateAll() {
@@ -105,5 +122,21 @@ export class Game {
         cb();
         this.updateAll();
         requestAnimationFrame(this.mainLoop.bind(this, cb));
+    }
+}
+
+/**
+ * A list of entities that can be switched to.
+ */
+export class Scene {
+    #entities: Entity[] = [];
+    add(entity: Entity) {
+        this.#entities.push(entity);
+    }
+    addAll(entities: Entity[]) {
+        for(const entity of entities) this.add(entity);
+    }
+    get entities() {
+        return this.#entities;
     }
 }
