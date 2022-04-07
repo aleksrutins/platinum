@@ -9,7 +9,7 @@ export class Game {
     #systems: System[] = []
     #baseEntities: Entity[] = [];
     #scene?: Scene;
-    get #entities() {
+    get entities() {
         return [...this.#baseEntities, ...(this.#scene?.entities ?? [])];
     }
 
@@ -52,9 +52,21 @@ export class Game {
         }
     }
 
+    /**
+     * Remove an entity from the game.
+     * @param entity The entity to remove.
+     */
+    remove(entity: Entity) {
+        if(this.#baseEntities.includes(entity)) {
+            this.#baseEntities.splice(this.#baseEntities.indexOf(entity), 1);
+        } else if(this.#scene?.entities.includes(entity)) {
+            this.#scene.entities.splice(this.#scene.entities.indexOf(entity), 1);
+        }
+    }
+
     /** Clear all entities from the game. */
     clear() {
-        this.#baseEntities.splice(0, this.#entities.length);
+        this.#baseEntities.splice(0, this.entities.length);
     }
 
     /**
@@ -76,7 +88,7 @@ export class Game {
                 console.error(e);
             }
         }
-        for(const entity of this.#entities) {
+        for(const entity of this.entities) {
             try {
                 entity.update(this.#systems);
             } catch(e) {
@@ -92,7 +104,7 @@ export class Game {
      * @returns The entity, if it exists. Otherwise, null.
      */
     get<T extends Entity>(t: Type<T>, name: string): Nullable<T> {
-        for(const entity of this.#entities) {
+        for(const entity of this.entities) {
             if(entity instanceof t && entity.name == name) return entity;
         }
     }
@@ -103,7 +115,7 @@ export class Game {
      * @returns All entities matching the predicate.
      */
     getWhere(predicate: (e: Entity) => boolean): Entity[] {
-        return this.#entities.filter(predicate);
+        return this.entities.filter(predicate);
     }
 
     /**
