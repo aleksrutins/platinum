@@ -133,10 +133,10 @@ export class Game {
      * Start the game's main loop.
      * @param cb A callback to be called each frame.
      */
-    mainLoop(cb: () => void) {
-        cb();
+    mainLoop(cb: () => boolean) {
+        const shouldContinue = cb();
         this.updateAll();
-        requestAnimationFrame(this.mainLoop.bind(this, cb));
+        if(shouldContinue) requestAnimationFrame(this.mainLoop.bind(this, cb));
     }
 }
 

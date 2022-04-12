@@ -89,5 +89,5 @@ game.add(camera);
 game.getSystem(platinum.s2d.RenderSystem2D)!.clearColor = 'yellow';
 
 game.mainLoop(() => {
-    
+    return true;
 });
