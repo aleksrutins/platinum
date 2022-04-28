@@ -16,9 +16,11 @@ export interface System {
      */
     init(game: Game): void;
     /**
-     * Called once every frame.
+     * Called once every frame, before any entities have updated.
      */
     update(): void;
+    /** Called once every frame, after all entities have updated. */
+    postUpdate(): void;
 }
 
 /**

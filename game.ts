@@ -95,6 +95,13 @@ export class Game {
                 console.error(e);
             }
         }
+        for(const system of this.#systems) {
+            try {
+                system.postUpdate();
+            } catch(e) {
+                console.error(e);
+            }
+        }
     }
 
     /**

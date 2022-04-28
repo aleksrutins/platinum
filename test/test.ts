@@ -71,6 +71,8 @@ const level: platinum.s2d.level.Level = {
 
 const tilemap = await platinum.image.load('tilemap.png');
 
+const light = new s2d.effects.PointLight2D(0, 0, 640, 480);
+
 game.addAll(await platinum.s2d.level.LevelLoader.load(level, {
     image: tilemap,
     tileHeight: 32,
@@ -87,7 +89,10 @@ game.addAll(await platinum.s2d.level.LevelLoader.load(level, {
 game.add(camera);
 
 game.getSystem(platinum.s2d.RenderSystem2D)!.clearColor = 'yellow';
+game.getSystem(s2d.RenderSystem2D)!.addEffect(light);
 
 game.mainLoop(() => {
+    light.cx = game.get(Player, 'player')!.getComponent(Transform2D)!.actX;
+    light.cy = game.get(Player, 'player')!.getComponent(Transform2D)!.actY;
     return true;
 });

@@ -7,3 +7,5 @@ export * from './PlatformerPhysics2D.ts';
 
 /** Utilities for loading levels. */
 export * as level from './level/mod.ts';
+
+export * as effects from './effects/mod.ts';

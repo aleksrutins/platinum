@@ -5,11 +5,16 @@ import { expect } from "../internal/expect.ts";
 
 export const ContextInitError = createError("Failed to initialize context");
 
+export interface PostRenderEffect {
+    update(system: RenderSystem2D): void;
+}
+
 /**
  * A system to render to a CanvasRenderingContext2D.
  */
 export class RenderSystem2D implements System {
     #canvas: HTMLCanvasElement;
+    #effects: PostRenderEffect[] = [];
     ctx: CanvasRenderingContext2D;
 
     /** The background color to use. */
@@ -29,8 +34,16 @@ export class RenderSystem2D implements System {
         this.game = game;
     }
 
+    addEffect(effect: PostRenderEffect) {
+        this.#effects.push(effect);
+    }
+
     update(): void {
         this.#canvas.style.backgroundColor = this.clearColor;
         this.ctx.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
+    }
+
+    postUpdate(): void {
+        this.#effects.forEach(effect => effect.update(this));
     }
 }
