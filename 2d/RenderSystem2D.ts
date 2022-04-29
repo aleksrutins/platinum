@@ -44,6 +44,8 @@ export class RenderSystem2D implements System {
     }
 
     postUpdate(): void {
-        this.#effects.forEach(effect => effect.update(this));
+        for(const effect of this.#effects) {
+            effect.update(this);
+        }
     }
 }

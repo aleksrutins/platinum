@@ -89,10 +89,11 @@ game.addAll(await platinum.s2d.level.LevelLoader.load(level, {
 game.add(camera);
 
 game.getSystem(platinum.s2d.RenderSystem2D)!.clearColor = 'yellow';
+game.getSystem(s2d.RenderSystem2D)!.addEffect(new s2d.effects.Darkness(640, 480));
 game.getSystem(s2d.RenderSystem2D)!.addEffect(light);
 
 game.mainLoop(() => {
-    light.cx = game.get(Player, 'player')!.getComponent(Transform2D)!.actX;
-    light.cy = game.get(Player, 'player')!.getComponent(Transform2D)!.actY;
+    light.cx = game.get(Player, 'player')!.getComponent(Transform2D)!.actX + game.get(Player, 'player')!.getComponent(s2d.CollisionBox2D)!.width/2;
+    light.cy = game.get(Player, 'player')!.getComponent(Transform2D)!.actY + game.get(Player, 'player')!.getComponent(s2d.CollisionBox2D)!.height/2;
     return true;
 });
