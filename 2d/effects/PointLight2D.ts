@@ -8,7 +8,7 @@ export class PointLight2D implements PostRenderEffect {
         const xi1 = this.radius;
         const xi2 = -this.radius;
         const yi = this.brightness;
-        const a = (1 / (((-xi1 * x^-1) - (xi2 * x^-1) + (xi1 * xi2 * x^-2)) / yi));
+        const a = ((((-xi1 * x) - (xi2 * x) + (xi1 * xi2 * x^2)) / yi));
         // Return the parabola in vertex form
         return (a * x) + yi;
     }
@@ -17,7 +17,7 @@ export class PointLight2D implements PostRenderEffect {
         return this.#parabola(dist);
     }
     #pixelProp = (i: number) => i % 4
-    constructor(public cx: number, public cy: number, private screenWidth: number, private screenHeight: number, private brightness: number = 255, private radius: number = 50) { }
+    constructor(public cx: number, public cy: number, private screenWidth: number, private screenHeight: number, private brightness: number = 255, private radius: number = 30) { }
     update(system: RenderSystem2D): void {
         const ctx = system.ctx;
         const image = ctx.getImageData(0, 0, this.screenWidth, this.screenHeight);
@@ -31,7 +31,7 @@ export class PointLight2D implements PostRenderEffect {
                 case 2: // blue
                     return;
                 case 3:
-                    image.data[index] = value + this.#pointBrightness(x, y);
+                    image.data[index] = this.#pointBrightness(x, y);
             }
         });
         ctx.putImageData(image, 0, 0);

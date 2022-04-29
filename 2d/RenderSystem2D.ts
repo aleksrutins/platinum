@@ -39,8 +39,8 @@ export class RenderSystem2D implements System {
     }
 
     update(): void {
-        this.#canvas.style.backgroundColor = this.clearColor;
-        this.ctx.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
+        this.ctx.fillStyle = this.clearColor;
+        this.ctx.fillRect(0, 0, this.#canvas.width, this.#canvas.height);
     }
 
     postUpdate(): void {
