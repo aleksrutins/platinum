@@ -1,11 +1,9 @@
-import * as platinum from '../mod.ts';
-import Transform2D = platinum.s2d.Transform2D;
-import s2d = platinum.s2d;
+import * as platinum from 'platinum';
 
 class Player extends platinum.ecs.Entity {
     constructor(private camera: platinum.s2d.CameraEntity2D, transform: Transform2D) {
         super("player");
-        this.attach(new s2d.PlatformerPhysics2D());
+        this.attach(new PlatformerPhysics2D());
         this.attach(transform);
         this.attach(new platinum.s2d.CollisionBox2D(platinum.s2d.CollisionType.DoNotAvoid, 24, 24));
         platinum.image.loadBitmap('sprite.png').then(bmp => {
@@ -15,8 +13,8 @@ class Player extends platinum.ecs.Entity {
 
     update(systems: platinum.ecs.System[]) {
         const transform = this.getComponent(Transform2D)!;
-        const collision = this.getComponent(s2d.CollisionBox2D)!;
-        const platformer = this.getComponent(s2d.PlatformerPhysics2D)!;
+        const collision = this.getComponent(CollisionBox2D)!;
+        const platformer = this.getComponent(PlatformerPhysics2D)!;
         if(keyboard.isDown('ArrowUp') && collision.hasCollision()) {
             platformer.jump();
         }
@@ -71,7 +69,7 @@ const level: platinum.s2d.level.Level = {
 
 const tilemap = await platinum.image.load('tilemap.png');
 
-const light = new s2d.effects.PointLight2D(0, 0, 640, 480);
+const light = new PointLight2D(0, 0, 640, 480);
 
 game.addAll(await platinum.s2d.level.LevelLoader.load(level, {
     image: tilemap,
@@ -89,11 +87,11 @@ game.addAll(await platinum.s2d.level.LevelLoader.load(level, {
 game.add(camera);
 
 game.getSystem(platinum.s2d.RenderSystem2D)!.clearColor = 'yellow';
-game.getSystem(s2d.RenderSystem2D)!.addEffect(new s2d.effects.Darkness(640, 480));
-game.getSystem(s2d.RenderSystem2D)!.addEffect(light);
+game.getSystem(platinum.s2d.RenderSystem2D)!.addEffect(new platinum.s2d.effects.Darkness(640, 480));
+game.getSystem(platinum.s2d.RenderSystem2D)!.addEffect(light);
 
 game.mainLoop(() => {
-    light.cx = game.get(Player, 'player')!.getComponent(Transform2D)!.actX + game.get(Player, 'player')!.getComponent(s2d.CollisionBox2D)!.width/2;
-    light.cy = game.get(Player, 'player')!.getComponent(Transform2D)!.actY + game.get(Player, 'player')!.getComponent(s2d.CollisionBox2D)!.height/2;
+    light.cx = game.get(Player, 'player')!.getComponent(Transform2D)!.actX + game.get(Player, 'player')!.getComponent(platinum.s2d.CollisionBox2D)!.width/2;
+    light.cy = game.get(Player, 'player')!.getComponent(Transform2D)!.actY + game.get(Player, 'player')!.getComponent(platinum.s2d.CollisionBox2D)!.height/2;
     return true;
 });

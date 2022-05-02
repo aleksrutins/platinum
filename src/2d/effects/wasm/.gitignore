@@ -1,0 +1,2 @@
+*.wasm
+zig-cache/
