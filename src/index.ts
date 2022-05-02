@@ -3,12 +3,12 @@ export * from './game';
 /**
  * Utilities for working with Platinum's Entity-Component-System (ECS).
  */
-export * as ecs from './ecs';
+export * from './ecs';
 
 /**
  * Everything 2D.
  */
-export * as s2d from './2d';
+export * from './2d';
 
 /**
  * Utilities for creating extensions.
@@ -23,7 +23,7 @@ export * as s2d from './2d';
  * // ... //
  * let logger = game.useExt(LoggerExtension);
  */
-export * as extension from './extension';
+export *  as extension from './extension';
 
 /** Utilities for handling input. */
 export * as input from './input';

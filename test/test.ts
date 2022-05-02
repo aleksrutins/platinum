@@ -1,17 +1,21 @@
 import * as platinum from 'platinum';
+import tilemapURL from './tilemap.png';
+import spriteURL from './sprite.png';
+import { CollisionBox2D, PlatformerPhysics2D, Transform2D } from 'platinum';
 
-class Player extends platinum.ecs.Entity {
-    constructor(private camera: platinum.s2d.CameraEntity2D, transform: Transform2D) {
+(async () => {
+class Player extends platinum.Entity {
+    constructor(private camera: platinum.CameraEntity2D, transform: Transform2D) {
         super("player");
         this.attach(new PlatformerPhysics2D());
         this.attach(transform);
-        this.attach(new platinum.s2d.CollisionBox2D(platinum.s2d.CollisionType.DoNotAvoid, 24, 24));
-        platinum.image.loadBitmap('sprite.png').then(bmp => {
-            this.attach(new platinum.s2d.Sprite2D(bmp, 0.75));
+        this.attach(new platinum.CollisionBox2D(platinum.CollisionType.DoNotAvoid, 24, 24));
+        platinum.image.loadBitmap(spriteURL).then(bmp => {
+            this.attach(new platinum.Sprite2D(bmp, 0.75));
         });
     }
 
-    update(systems: platinum.ecs.System[]) {
+    update(systems: platinum.System[]) {
         const transform = this.getComponent(Transform2D)!;
         const collision = this.getComponent(CollisionBox2D)!;
         const platformer = this.getComponent(PlatformerPhysics2D)!;
@@ -30,13 +34,13 @@ class Player extends platinum.ecs.Entity {
 
 let game = new platinum.Game;
 
-game.use(new platinum.s2d.RenderSystem2D(document.querySelector('#game')!));
+game.use(new platinum.RenderSystem2D(document.querySelector('#game')!));
 
 let keyboard = game.useExt(platinum.input.keyboard.KeyboardManager);
 
-let camera = new platinum.s2d.CameraEntity2D("camera", 640, 480);
+let camera = new platinum.CameraEntity2D("camera", 640, 480);
 
-const level: platinum.s2d.level.Level = {
+const level: platinum.level.Level = {
     name: "main",
     tiles: [
         {
@@ -67,11 +71,11 @@ const level: platinum.s2d.level.Level = {
     ]
 }
 
-const tilemap = await platinum.image.load('tilemap.png');
+const tilemap = await platinum.image.load(tilemapURL);
 
-const light = new PointLight2D(0, 0, 640, 480);
+const light = new platinum.effects.PointLight2D(0, 0, 640, 480);
 
-game.addAll(await platinum.s2d.level.LevelLoader.load(level, {
+game.addAll(await platinum.level.LevelLoader.load(level, {
     image: tilemap,
     tileHeight: 32,
     tileWidth: 32,
@@ -86,12 +90,13 @@ game.addAll(await platinum.s2d.level.LevelLoader.load(level, {
 
 game.add(camera);
 
-game.getSystem(platinum.s2d.RenderSystem2D)!.clearColor = 'yellow';
-game.getSystem(platinum.s2d.RenderSystem2D)!.addEffect(new platinum.s2d.effects.Darkness(640, 480));
-game.getSystem(platinum.s2d.RenderSystem2D)!.addEffect(light);
+game.getSystem(platinum.RenderSystem2D)!.clearColor = 'yellow';
+//game.getSystem(platinum.s2d.RenderSystem2D)!.addEffect(new platinum.s2d.effects.Darkness(640, 480));
+//game.getSystem(platinum.s2d.RenderSystem2D)!.addEffect(light);
 
 game.mainLoop(() => {
-    light.cx = game.get(Player, 'player')!.getComponent(Transform2D)!.actX + game.get(Player, 'player')!.getComponent(platinum.s2d.CollisionBox2D)!.width/2;
-    light.cy = game.get(Player, 'player')!.getComponent(Transform2D)!.actY + game.get(Player, 'player')!.getComponent(platinum.s2d.CollisionBox2D)!.height/2;
+    light.cx = game.get(Player, 'player')!.getComponent(Transform2D)!.actX + game.get(Player, 'player')!.getComponent(platinum.CollisionBox2D)!.width/2;
+    light.cy = game.get(Player, 'player')!.getComponent(Transform2D)!.actY + game.get(Player, 'player')!.getComponent(platinum.CollisionBox2D)!.height/2;
     return true;
 });
+})();
