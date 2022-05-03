@@ -18,4 +18,4 @@ export fn calculateAll(buf: [*]u8, width: usize, height: usize, cx: u32, cy: u32
         const y = (i / 4) / width;
         buf[i] = value + @floatToInt(u8, calculate(x, y, radius, brightness, cx, cy));
     }
-} 
+}

@@ -33,8 +33,12 @@ class Player extends platinum.Entity {
 }
 
 let game = new platinum.Game;
+const light = new platinum.effects.PointLight2D(0, 0);
+let system = new platinum.RenderSystem2D(document.querySelector('#game')!);
+//system.addEffect(new platinum.effects.Darkness(640, 480));
+system.addEffect(light);
 
-game.use(new platinum.RenderSystem2D(document.querySelector('#game')!));
+game.use(system);
 
 let keyboard = game.useExt(platinum.input.keyboard.KeyboardManager);
 
@@ -73,8 +77,6 @@ const level: platinum.level.Level = {
 
 const tilemap = await platinum.image.load(tilemapURL);
 
-const light = new platinum.effects.PointLight2D(0, 0, 640, 480);
-
 game.addAll(await platinum.level.LevelLoader.load(level, {
     image: tilemap,
     tileHeight: 32,
@@ -91,8 +93,6 @@ game.addAll(await platinum.level.LevelLoader.load(level, {
 game.add(camera);
 
 game.getSystem(platinum.RenderSystem2D)!.clearColor = 'yellow';
-//game.getSystem(platinum.s2d.RenderSystem2D)!.addEffect(new platinum.s2d.effects.Darkness(640, 480));
-//game.getSystem(platinum.s2d.RenderSystem2D)!.addEffect(light);
 
 game.mainLoop(() => {
     light.cx = game.get(Player, 'player')!.getComponent(Transform2D)!.actX + game.get(Player, 'player')!.getComponent(platinum.CollisionBox2D)!.width/2;
