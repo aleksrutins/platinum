@@ -10,7 +10,7 @@ fn parabola(x: f64, max: u32, radius: u32) f64 {
 }
 
 fn calculate(x: u32, y: u32, radius: u32, brightness: u32, cx: u32, cy: u32) f64 {
-    const dist = @sqrt((@intToFloat(f32, x - cx)*@intToFloat(f32, x - cx)) + (@intToFloat(f32, y - cy)*@intToFloat(f32, x - cx)));
+    const dist = @sqrt((@intToFloat(f32, x - cx)*@intToFloat(f32, x - cx)) + (@intToFloat(f32, y - cy)*@intToFloat(f32, y - cy)));
     return parabola(dist, brightness, radius);
 }
 

@@ -20,7 +20,7 @@ export interface System {
      */
     update(): void;
     /** Called once every frame, after all entities have updated. */
-    postUpdate(): void;
+    postUpdate(): void | Promise<void>;
 }
 
 /**

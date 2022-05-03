@@ -4,7 +4,8 @@
   "description": "",
   "main": "test.bundle.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "rm -rf .parcel-cache dist && parcel test.html"
   },
   "author": "",
   "license": "ISC",

@@ -45,9 +45,7 @@ export class RenderSystem2D implements System {
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
-    postUpdate(): void {
-        for(const effect of this.#effects) {
-            effect.update?.(this);
-        }
+    async postUpdate() {
+        await Promise.all(this.#effects.map(effect => effect.update?.(this)));
     }
 }

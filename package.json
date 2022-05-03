@@ -12,7 +12,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "ts-types": "tsc --declaration --emitDeclarationOnly --outDir lib",
-    "build": "rimraf lib && node ./build.cjs && npm run ts-types"
+    "build": "rimraf lib && make -C src-wasm && node ./build.cjs && npm run ts-types"
   },
   "repository": {
     "type": "git",

@@ -80,7 +80,7 @@ export class Game {
         }
     }
     
-    private updateAll() {
+    private async updateAll() {
         for(const system of this.#systems) {
             try {
                 system.update();
@@ -97,7 +97,7 @@ export class Game {
         }
         for(const system of this.#systems) {
             try {
-                system.postUpdate();
+                await system.postUpdate();
             } catch(e) {
                 console.error(e);
             }
@@ -140,9 +140,9 @@ export class Game {
      * Start the game's main loop.
      * @param cb A callback to be called each frame.
      */
-    mainLoop(cb: () => boolean) {
+    async mainLoop(cb: () => boolean) {
         const shouldContinue = cb();
-        this.updateAll();
+        await this.updateAll();
         if(shouldContinue) requestAnimationFrame(this.mainLoop.bind(this, cb));
     }
 }
