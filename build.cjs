@@ -1,4 +1,5 @@
 const esbuild = require('esbuild');
+const { wasmPack } = require('esbuild-plugin-wasm-pack');
 
 let wasmPlugin = {
     name: 'wasm',
@@ -65,6 +66,9 @@ esbuild.build({
     format: 'esm',
     target: ['esnext'],
     plugins: [
-        wasmPlugin
+        wasmPlugin,
+        wasmPack({
+          path: 'src-wasm'
+        })
     ]
 }).catch(() => process.exit(1));

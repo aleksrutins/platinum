@@ -1,5 +1,5 @@
 import { PostRenderEffect, RenderSystem2D } from "../RenderSystem2D";
-import load from '../../../src-wasm/point-light.wasm';
+import load from '../../../src-wasm/pkg/src_wasm_bg.wasm';
 export class PointLight2D extends PostRenderEffect {
     #wasm: Promise<any>;
     constructor(
@@ -28,7 +28,7 @@ export class PointLight2D extends PostRenderEffect {
         for(let i = 0; i < image.data.length; i++) {
             mem8[i] = image.data[i];
         }
-        wasm.calculateAll(0, system.canvas.width, system.canvas.height, this.cx, this.cy, this.radius, this.brightness);
+        wasm.calculate_all(0, system.canvas.width, system.canvas.height, this.cx, this.cy, this.radius, this.brightness);
         for(let i = 0; i < image.data.length; i++) {
             image.data[i] = mem8[i];
         }
