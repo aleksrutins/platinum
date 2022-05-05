@@ -1,37 +1,28 @@
+import { Component, System } from "../../ecs";
 import { PostRenderEffect, RenderSystem2D } from "../RenderSystem2D";
-import load from '../../../src-wasm/pkg/src_wasm_bg.wasm';
-export class PointLight2D extends PostRenderEffect {
-    #wasm: Promise<any>;
-    constructor(
-        public cx: number,
-        public cy: number,
-        private brightness: number = 255,
-        private radius: number = 20
-    ) {
-        super();
-        this.#wasm = load({});
-    }
-    async init(system: RenderSystem2D) {
-        // grow memory to accomodate everything
-        const wasm = await this.#wasm;
-        const bytesPerPage = 64 * 1024;
-        const necessaryBytes = system.canvas.width * system.canvas.height + 1;
-        if(necessaryBytes <= wasm.memory.buffer.byteLength) return;
-        const newPages = Math.ceil((necessaryBytes - wasm.memory.buffer.byteLength) / bytesPerPage);
-        wasm.memory.grow(newPages);
-    }
-    async update(system: RenderSystem2D) {
-        const wasm = await this.#wasm;
+import { Transform2D } from "../Transform2D";
 
-        const image = system.ctx.getImageData(0, 0, system.canvas.width, system.canvas.height);
-        const mem8 = new Uint8Array((wasm.memory as WebAssembly.Memory).buffer);
-        for(let i = 0; i < image.data.length; i++) {
-            mem8[i] = image.data[i];
+export class PointLight2D implements PostRenderEffect {
+    #parabola(x: number): number {
+        // Find the "slope" of the parabola, based on the x-intercepts (this.radius and -this.radius) and vertex ((0, this.brightness) - also the y-intercept, thankfully)
+        const yi = this.brightness;
+        const a = (-(this.radius^2) * x^2) / yi;
+        // Return the parabola in vertex form
+        return Math.max((a * x) + yi, 0);
+    }
+    #pointBrightness(x: number, y: number): number {
+        const dist = Math.sqrt(Math.pow(x - this.cx, 2) + Math.pow(y - this.cy, 2));
+        return this.#parabola(dist);
+    }
+    constructor(public cx: number, public cy: number, private screenWidth: number, private screenHeight: number, private brightness: number = 255, private radius: number = 20) { }
+    update(system: RenderSystem2D): void {
+        const ctx = system.ctx;
+        const image = ctx.getImageData(0, 0, this.screenWidth, this.screenHeight);
+        for(let index = 0; index < image.data.length; index += 4) {
+            const x = (index / 4) % this.screenWidth;
+            const y = Math.floor((index / 4) / this.screenWidth);
+            image.data[index + 3] += this.#pointBrightness(x, y);
         }
-        wasm.calculate_all(0, system.canvas.width, system.canvas.height, this.cx, this.cy, this.radius, this.brightness);
-        for(let i = 0; i < image.data.length; i++) {
-            image.data[i] = mem8[i];
-        }
-        system.ctx.putImageData(image, 0, 0);
+        ctx.putImageData(image, 0, 0);
     }
 }

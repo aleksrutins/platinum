@@ -33,9 +33,9 @@ class Player extends platinum.Entity {
 }
 
 let game = new platinum.Game;
-const light = new platinum.effects.PointLight2D(0, 0);
+const light = new platinum.effects.PointLight2D(0, 0, 640, 480);
 let system = new platinum.RenderSystem2D(document.querySelector('#game')!);
-//system.addEffect(new platinum.effects.Darkness(640, 480));
+system.addEffect(new platinum.effects.Darkness(640, 480));
 system.addEffect(light);
 
 game.use(system);
