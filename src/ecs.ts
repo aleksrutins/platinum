@@ -1,4 +1,4 @@
-import {Type} from './internal/types';
+import {Type} from '@platinum-ge/internal';
 import { MessageReceiver, pingAll } from './messaging';
 import { Game } from './game';
 

@@ -1,6 +1,6 @@
 import { Entity, Component, System } from './ecs';
 import { GameExtension } from "./extension/index";
-import { Nullable, Type } from "./internal/types";
+import { Nullable, Type } from "@platinum-ge/internal";
 
 /**
  * This is the main object for a Platinum game.

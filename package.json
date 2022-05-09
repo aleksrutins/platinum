@@ -36,5 +36,8 @@
     "package-lock.json",
     "readme.md",
     "tsconfig.json"
-  ]
+  ],
+  "dependencies": {
+    "@platinum-ge/internal": "^0.2.1"
+  }
 }
