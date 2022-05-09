@@ -1,0 +1,5 @@
+docs/
+.github/
+src/
+test/
+build.cjs
