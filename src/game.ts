@@ -151,14 +151,11 @@ export class Game {
  * A list of entities that can be switched to.
  */
 export class Scene {
-    #entities: Entity[] = [];
+    entities: Entity[] = [];
     add(entity: Entity) {
-        this.#entities.push(entity);
+        this.entities.push(entity);
     }
     addAll(entities: Entity[]) {
         for(const entity of entities) this.add(entity);
-    }
-    get entities() {
-        return this.#entities;
     }
 }

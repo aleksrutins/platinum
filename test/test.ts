@@ -3,6 +3,7 @@ import * as image from "@platinum-ge/image";
 import tilemapURL from './tilemap.png';
 import spriteURL from './sprite.png';
 import { CameraEntity2D, CollisionBox2D, CollisionType, PlatformerPhysics2D, Sprite2D, Transform2D, effects, RenderSystem2D, level } from '@platinum-ge/2d';
+import { Scene } from '@platinum-ge/core';
 
 (async () => {
 class Player extends platinum.Entity {
@@ -34,6 +35,7 @@ class Player extends platinum.Entity {
 }
 
 let game = new platinum.Game;
+let scene = new Scene;
 const light = new effects.PointLight2D(0, 0, 640, 480);
 let system = new RenderSystem2D(document.querySelector('#game')!);
 system.addEffect(new effects.Darkness(640, 480));
@@ -78,7 +80,7 @@ const _level: level.Level = {
 
 const tilemap = await image.load(tilemapURL);
 
-game.addAll(await level.LevelLoader.load(_level, {
+scene.addAll(await level.LevelLoader.load(_level, {
     image: tilemap,
     tileHeight: 32,
     tileWidth: 32,
@@ -90,9 +92,8 @@ game.addAll(await level.LevelLoader.load(_level, {
             return new Player(camera, pos);
     }
 }))
-
+game.switchScene(scene);
 game.add(camera);
-
 game.getSystem(RenderSystem2D)!.clearColor = 'yellow';
 
 game.mainLoop(() => {
