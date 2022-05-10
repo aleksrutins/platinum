@@ -10,7 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "platinum": "file:.."
+    "@platinum-ge/2d": "^0.2.1",
+    "@platinum-ge/core": "file:..",
+    "@platinum-ge/image": "^0.2.1"
   },
   "devDependencies": {
     "parcel": "^2.5.0"
