@@ -10,7 +10,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "node --experimental-vm-modules \"$(npm bin jest)/jest\"",
+    "test": "npm run build && node --experimental-vm-modules \"$(npm bin jest)/jest\"",
     "ts-types": "tsc --declaration --emitDeclarationOnly --outDir lib",
     "build": "rimraf lib && node ./build.cjs && npm run ts-types",
     "prepublishOnly": "npm run build"
