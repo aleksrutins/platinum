@@ -1,6 +1,6 @@
 {
   "name": "@platinum-ge/core",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "A game engine for the modern Web.",
   "main": "lib/index.js",
   "module": "lib/index.js",
