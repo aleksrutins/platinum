@@ -59,7 +59,8 @@ export class Game {
     remove(entity: Entity) {
         if(this.#baseEntities.includes(entity)) {
             this.#baseEntities.splice(this.#baseEntities.indexOf(entity), 1);
-        } else if(this.#scene?.entities.includes(entity)) {
+        }
+        if(this.#scene?.entities.includes(entity)) {
             this.#scene.entities.splice(this.#scene.entities.indexOf(entity), 1);
         }
     }
