@@ -2,5 +2,10 @@
 export default {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  transformIgnorePatterns: ['/lib/']
+  transformIgnorePatterns: ['/lib/'],
+  globals: {
+    'ts-jest': {
+      'useESM': true
+    }
+  }
 };

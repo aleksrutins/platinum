@@ -1,5 +1,5 @@
 import { Game, Entity } from "..";
-let game!: Game;
+let game;
 
 class MockEntity extends Entity {
 }
