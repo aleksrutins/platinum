@@ -25,4 +25,36 @@ public class Entity {
             if(clazz.isAssignableFrom(component.getClass())) detach(component);
         }
     }
+
+    @SuppressWarnings({"unchecked"})
+    public <T extends Component<?>> T getComponent(Class<T> type) {
+        for (Component<?> component : components) {
+            if(component.getClass() == type) return (T)component;
+        }
+        return null;
+    }
+
+    public List<Component<?>> getComponents() {
+        return components;
+    }
+
+    public boolean hasComponent(Class<? extends Component<?>> type) {
+        return getComponent(type) != null;
+    }
+
+    public void init(System[] systems) {
+        for (Component<?> component : components) {
+            for (System system : systems) {
+                if(component.canUse(system.getClass())) component.init(system);
+            }
+        }
+    }
+
+    public void update(System[] systems) {
+        for (Component<?> component : components) {
+            for (System system : systems) {
+                if(component.canUse(system.getClass())) component.update(system);
+            }
+        }
+    }
 }
