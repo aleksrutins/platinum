@@ -6,7 +6,7 @@ public abstract class Component<T extends System> {
     Entity entity;
     @SuppressWarnings({"unchecked"})
     Class<T> systemType = (Class<T>) ((ParameterizedType)this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-    boolean canUse(Class<? extends System> tS) {
+    public boolean canUse(Class<? extends System> tS) {
         return tS == systemType;
     }
     abstract void init(T system);
