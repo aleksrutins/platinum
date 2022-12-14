@@ -8,7 +8,7 @@
 
 plugins {
     // Apply the java-library plugin for API and implementation separation.
-    id 'java-library'
+    id("java-library")
 }
 
 repositories {
@@ -18,16 +18,10 @@ repositories {
 
 dependencies {
     // Use JUnit Jupiter for testing.
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
-
-    // This dependency is exported to consumers, that is to say found on their compile classpath.
-    api 'org.apache.commons:commons-math3:3.6.1'
-
-    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
-    implementation 'com.google.guava:guava:31.1-jre'
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.1")
 }
 
-tasks.named('test') {
+tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
 }
