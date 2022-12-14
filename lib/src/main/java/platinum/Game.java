@@ -32,8 +32,6 @@ public class Game {
         return ext;
     }
 
-    // public <T extends GameExtension> void useExt(T extension);
-
     public <T extends Entity> void add(T entity) {
         entities.add(entity);
     }
