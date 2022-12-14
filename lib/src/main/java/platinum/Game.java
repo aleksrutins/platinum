@@ -26,10 +26,8 @@ public class Game {
         system.init(this);
     }
 
-    public <T extends GameExtension> T useExt(Class<T> extension) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        var ext = extension.getConstructor().newInstance();
-        ext.connect(this);
-        return ext;
+    public <T extends GameExtension> void useExt(T extension) {
+        extension.connect(this);
     }
 
     public <T extends Entity> void add(T entity) {
