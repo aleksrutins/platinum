@@ -5,10 +5,7 @@ import platinum.ecs.System;
 import platinum.extension.GameExtension;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 
 public class Game {
@@ -74,11 +71,23 @@ public class Game {
         return (Optional<T>) systems.stream().filter(e -> t.isAssignableFrom(e.getClass())).findFirst();
     }
 
+    protected class MainLoop extends TimerTask {
+        private boolean shouldContinue = true;
+        private final Function<Game, Boolean> cb;
+        public MainLoop(Function<Game, Boolean> cb) {
+            this.cb = cb;
+        }
+        @Override
+        public void run() {
+            shouldContinue = cb.apply(Game.this);
+            updateAll();
+            if(!shouldContinue) cancel();
+        }
+    }
+
     public void mainLoop(Function<Game, Boolean> cb) {
         var shouldContinue = true;
-        do {
-            shouldContinue = cb.apply(this);
-            updateAll();
-        } while (shouldContinue);
+        var timer = new Timer();
+        timer.scheduleAtFixedRate(new MainLoop(cb), 0, 17); // 60 frames per second
     }
 }
