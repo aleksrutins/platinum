@@ -84,7 +84,7 @@ public class Game {
     }
 
     public void mainLoop(Function<Game, Boolean> cb) {
-        var timer = new Timer();
+        var timer = new Timer("Platinum-MainLoop");
         timer.scheduleAtFixedRate(new MainLoop(cb), 0, 17); // 60 frames per second
     }
 }
