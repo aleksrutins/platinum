@@ -57,8 +57,6 @@ public class Game {
 
     private void updateAll() {
         systems.forEach(System::update);
-        entities.forEach(entity -> entity.update(systems));
-        systems.forEach(System::postUpdate);
     }
 
     @SuppressWarnings({"unchecked"})

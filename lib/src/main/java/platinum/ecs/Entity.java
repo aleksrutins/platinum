@@ -14,9 +14,11 @@ public class Entity {
     }
     public void attach(Component<?> component) {
         components.add(component);
+        component.entity = this;
     }
 
     public boolean detach(Component<?> component) {
+        component.entity = null;
         return components.remove(component);
     }
 
@@ -50,11 +52,9 @@ public class Entity {
         }
     }
 
-    public void update(List<System> systems) {
+    public void update(System system) {
         for (Component<?> component : components) {
-            for (System system : systems) {
-                if(component.canUse(system.getClass())) component.update(system);
-            }
+            if(component.canUse(system.getClass())) component.update(system);
         }
     }
 }
