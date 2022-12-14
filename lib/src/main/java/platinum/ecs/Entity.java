@@ -42,7 +42,7 @@ public class Entity {
         return getComponent(type) != null;
     }
 
-    public void init(System[] systems) {
+    public void init(List<System> systems) {
         for (Component<?> component : components) {
             for (System system : systems) {
                 if(component.canUse(system.getClass())) component.init(system);
@@ -50,7 +50,7 @@ public class Entity {
         }
     }
 
-    public void update(System[] systems) {
+    public void update(List<System> systems) {
         for (Component<?> component : components) {
             for (System system : systems) {
                 if(component.canUse(system.getClass())) component.update(system);
