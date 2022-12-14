@@ -2,7 +2,9 @@ package platinum;
 
 import platinum.ecs.Entity;
 import platinum.ecs.System;
+import platinum.extension.GameExtension;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -25,6 +27,12 @@ public class Game {
     public <T extends System> void use(T system) {
         systems.add(system);
         system.init(this);
+    }
+
+    public <T extends GameExtension> T useExt(Class<T> extension) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+        var ext = extension.getConstructor().newInstance();
+        ext.connect(this);
+        return ext;
     }
 
     // public <T extends GameExtension> void useExt(T extension);
