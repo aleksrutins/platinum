@@ -1,6 +1,5 @@
 package platinum.twod;
 
-import platinum.Game;
 import platinum.ecs.Component;
 import platinum.ecs.System;
 import platinum.math.Vec2;

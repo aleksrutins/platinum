@@ -3,7 +3,6 @@ package platinum.twod;
 import platinum.ecs.Component;
 import platinum.ecs.System;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Sprite2D extends Component<RenderSystem2D> {

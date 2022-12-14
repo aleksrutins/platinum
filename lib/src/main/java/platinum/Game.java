@@ -4,7 +4,6 @@ import platinum.ecs.Entity;
 import platinum.ecs.System;
 import platinum.extension.GameExtension;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.function.Function;
 

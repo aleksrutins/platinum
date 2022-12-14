@@ -8,9 +8,7 @@ import platinum.twod.Transform2D;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 public class Main {
@@ -28,6 +26,7 @@ public class Main {
     game.add(entity);
     wnd.add(renderer);
     wnd.pack();
+    wnd.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     wnd.setVisible(true);
     game.mainLoop(_game -> true);
   }
