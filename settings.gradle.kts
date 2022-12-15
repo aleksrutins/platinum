@@ -7,6 +7,14 @@
  * in the user manual at https://docs.gradle.org/7.6/userguide/multi_project_builds.html
  */
 
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+    }
+}
+
 rootProject.name = "platinum"
 include("lib")
 include("example")
+include("editor")
