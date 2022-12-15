@@ -3,6 +3,7 @@ package platinum.twod.level;
 import platinum.ecs.Entity;
 import platinum.twod.Sprite2D;
 import platinum.twod.Transform2D;
+import platinum.twod.collision.CollisionBox2D;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,7 +22,7 @@ public class LevelLoader {
           var sprite = new Sprite2D(image);
           entity.attach(new Transform2D(tile.x(), tile.y()));
           entity.attach(sprite);
-          // entity.attach(new CollisionBox2D(...));
+          entity.attach(new CollisionBox2D(tile.collisionType()));
           entities.add(entity);
       }
       for(var entity : level.entities()) {

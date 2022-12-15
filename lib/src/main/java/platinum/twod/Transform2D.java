@@ -74,6 +74,6 @@ public class Transform2D extends Component<RenderSystem2D> {
 
     @Override
     public void update(System system) {
-
+        translate(delta);
     }
 }

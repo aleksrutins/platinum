@@ -25,7 +25,7 @@ public class Main {
 
     var tilemapImg = ImageIO.read(Main.class.getResource("/platinum/example/tilemap.png"));
     var tiles = LevelLoader.load(new Level("main", new TileInfo[]{
-            new TileInfo(0, 15, 15, CollisionType.DO_NOT_AVOID),
+            new TileInfo(0, 15, 75, CollisionType.DO_NOT_AVOID),
             new TileInfo(1, 57, 57, CollisionType.PASS_THROUGH),
             new TileInfo(1, 98, 73, CollisionType.PASS_THROUGH)
     }, new LevelEntity[] {
@@ -63,12 +63,13 @@ public class Main {
         var entity = game.get(Entity.class, "player").orElseThrow();
         var transform = entity.getComponent(Transform2D.class);
         var platformer = entity.getComponent(PlatformerPhysics2D.class);
+        var collisionBox = entity.getComponent(CollisionBox2D.class);
       if(kbd.isDown(KeyEvent.VK_RIGHT) || kbd.isDown(KeyEvent.VK_D)) {
         transform.translate(new Vec2(5, 0));
       } else if(kbd.isDown(KeyEvent.VK_LEFT) || kbd.isDown(KeyEvent.VK_A)) {
         transform.translate(new Vec2(-5, 0));
       }
-      if(kbd.isDown(KeyEvent.VK_UP) || kbd.isDown(KeyEvent.VK_W)) {
+        if((kbd.isDown(KeyEvent.VK_UP) || kbd.isDown(KeyEvent.VK_W)) && collisionBox.hasCollision()) {
         platformer.jump();
       }
       camera.follow(transform, 0.1f);

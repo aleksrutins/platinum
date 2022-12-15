@@ -22,10 +22,10 @@ public class PlatformerPhysics2D extends Component<RenderSystem2D> {
             return;
         }
 
-        if(!collisionBox.hasCollision()) {
-            transform.delta = Vec2.add(transform.delta, new Vec2(0, fallSpeed));
-        } else {
+        if(collisionBox.hasCollision()) {
             transform.delta = new Vec2(transform.delta.x(), 0);
+        } else {
+            transform.delta = Vec2.add(transform.delta, new Vec2(0, fallSpeed));
         }
     }
 
