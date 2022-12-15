@@ -3,10 +3,7 @@ import platinum.Game;
 import platinum.ecs.Entity;
 import platinum.input.KeyboardManager;
 import platinum.math.Vec2;
-import platinum.twod.CameraEntity2D;
-import platinum.twod.RenderSystem2D;
-import platinum.twod.Sprite2D;
-import platinum.twod.Transform2D;
+import platinum.twod.*;
 import platinum.twod.collision.CollisionBox2D;
 import platinum.twod.collision.CollisionType;
 import platinum.twod.level.*;
@@ -44,6 +41,7 @@ public class Main {
                 player.attach(transform);
                 player.attach(new Sprite2D(img));
                 player.attach(new CollisionBox2D(CollisionType.DO_NOT_AVOID, 32, 32));
+                player.attach(new PlatformerPhysics2D());
                 yield player;
             }
             default -> null;
@@ -64,15 +62,14 @@ public class Main {
     game.mainLoop(_game -> {
         var entity = game.get(Entity.class, "player").orElseThrow();
         var transform = entity.getComponent(Transform2D.class);
+        var platformer = entity.getComponent(PlatformerPhysics2D.class);
       if(kbd.isDown(KeyEvent.VK_RIGHT) || kbd.isDown(KeyEvent.VK_D)) {
         transform.translate(new Vec2(5, 0));
       } else if(kbd.isDown(KeyEvent.VK_LEFT) || kbd.isDown(KeyEvent.VK_A)) {
         transform.translate(new Vec2(-5, 0));
       }
       if(kbd.isDown(KeyEvent.VK_UP) || kbd.isDown(KeyEvent.VK_W)) {
-        transform.translate(new Vec2(0, -5));
-      } else if(kbd.isDown(KeyEvent.VK_DOWN) || kbd.isDown(KeyEvent.VK_S)) {
-        transform.translate(new Vec2(0, 5));
+        platformer.jump();
       }
       camera.follow(transform, 0.1f);
       return true;
