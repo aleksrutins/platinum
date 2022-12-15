@@ -65,14 +65,13 @@ public class Game {
     }
 
     protected class MainLoop extends TimerTask {
-        private boolean shouldContinue = true;
         private final Function<Game, Boolean> cb;
         public MainLoop(Function<Game, Boolean> cb) {
             this.cb = cb;
         }
         @Override
         public void run() {
-            shouldContinue = cb.apply(Game.this);
+            boolean shouldContinue = cb.apply(Game.this);
             updateAll();
             if(!shouldContinue) cancel();
         }
