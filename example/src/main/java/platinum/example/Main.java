@@ -62,14 +62,14 @@ public class Main {
     game.mainLoop(_game -> {
         var entity = game.get(Entity.class, "player").orElseThrow();
         var transform = entity.getComponent(Transform2D.class);
-      if(kbd.isDown(KeyEvent.VK_RIGHT)) {
+      if(kbd.isDown(KeyEvent.VK_RIGHT) || kbd.isDown(KeyEvent.VK_D)) {
         transform.translate(new Vec2(5, 0));
-      } else if(kbd.isDown(KeyEvent.VK_LEFT)) {
+      } else if(kbd.isDown(KeyEvent.VK_LEFT) || kbd.isDown(KeyEvent.VK_A)) {
         transform.translate(new Vec2(-5, 0));
       }
-      if(kbd.isDown(KeyEvent.VK_UP)) {
+      if(kbd.isDown(KeyEvent.VK_UP) || kbd.isDown(KeyEvent.VK_W)) {
         transform.translate(new Vec2(0, -5));
-      } else if(kbd.isDown(KeyEvent.VK_DOWN)) {
+      } else if(kbd.isDown(KeyEvent.VK_DOWN) || kbd.isDown(KeyEvent.VK_S)) {
         transform.translate(new Vec2(0, 5));
       }
       camera.follow(transform, 0.1f);
