@@ -7,6 +7,8 @@ import platinum.twod.CameraEntity2D;
 import platinum.twod.RenderSystem2D;
 import platinum.twod.Sprite2D;
 import platinum.twod.Transform2D;
+import platinum.twod.collision.CollisionType;
+import platinum.twod.level.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -16,20 +18,40 @@ import java.io.IOException;
 import java.net.URL;
 
 public class Main {
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) throws Exception {
     var game = new Game();
     var wnd = new JFrame("Platinum Example");
     wnd.setPreferredSize(new Dimension(640, 480));
     var kbd = new KeyboardManager(wnd);
     var img = ImageIO.read(Main.class.getResource("/platinum/example/player.png"));
+
+    var tilemapImg = ImageIO.read(Main.class.getResource("/platinum/example/tilemap.png"));
+    var tiles = LevelLoader.load(new Level("main", new TileInfo[]{
+            new TileInfo(0, 15, 15, CollisionType.PASS_THROUGH),
+            new TileInfo(1, 57, 57, CollisionType.PASS_THROUGH),
+            new TileInfo(1, 98, 73, CollisionType.PASS_THROUGH)
+    }, new LevelEntity[] {
+            new LevelEntity("player", 25, 25)
+    }), new TilemapInfo(
+            tilemapImg,
+            5,1,
+            32, 32
+    ), (name, transform) -> {
+        return switch(name) {
+            case "player" -> {
+                var player = new Entity("player");
+                player.attach(transform);
+                player.attach(new Sprite2D(img));
+                yield player;
+            }
+            default -> null;
+        };
+    });
+
     var renderer = new RenderSystem2D();
-    var sprite = new Sprite2D(img);
-    var entity = new Entity("player");
     var camera = new CameraEntity2D("camera", 640, 480);
-    entity.attach(new Transform2D(15, 15));
-    entity.attach(sprite);
     game.use(renderer);
-    game.add(entity);
+    game.addAll(tiles);
     game.add(camera);
     wnd.add(renderer);
     wnd.pack();
@@ -38,7 +60,8 @@ public class Main {
     wnd.setVisible(true);
 
     game.mainLoop(_game -> {
-      var transform = entity.getComponent(Transform2D.class);
+        var entity = game.get(Entity.class, "player").orElseThrow();
+        var transform = entity.getComponent(Transform2D.class);
       if(kbd.isDown(KeyEvent.VK_RIGHT)) {
         transform.translate(new Vec2(5, 0));
       } else if(kbd.isDown(KeyEvent.VK_LEFT)) {

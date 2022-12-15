@@ -24,7 +24,7 @@ public class Transform2D extends Component<RenderSystem2D> {
         y = newPos.y();
     }
     private final List<Vec2> history = new ArrayList<>();
-    public Transform2D(int x, int y) {
+    public Transform2D(float x, float y) {
         this.x = x;
         this.y = y;
     }

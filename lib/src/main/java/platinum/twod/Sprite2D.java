@@ -3,6 +3,7 @@ package platinum.twod;
 import platinum.ecs.Component;
 import platinum.ecs.System;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Sprite2D extends Component<RenderSystem2D> {
@@ -19,6 +20,6 @@ public class Sprite2D extends Component<RenderSystem2D> {
     @Override
     public void update(System system) {
         Transform2D transform = getComponent(Transform2D.class);
-        ((RenderSystem2D)system).graphics2D.drawImage(img, transform.getActXi(), transform.getActYi(), img.getWidth(), img.getHeight(), ((RenderSystem2D) system).clearColor, null);
+        ((RenderSystem2D)system).graphics2D.drawImage(img, transform.getActXi(), transform.getActYi(), img.getWidth(), img.getHeight(), new Color(0, 0, 0, 0), null);
     }
 }
