@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Transform2D extends Component<RenderSystem2D> {
-    public int xMod = 0;
-    public int yMod = 0;
+    public float xMod = 0;
+    public float yMod = 0;
     public Vec2 delta = new Vec2(0, 0);
-    private int x;
-    private int y;
+    private float x;
+    private float y;
 
     public Vec2 getPosition() {
         return new Vec2(x, y);
@@ -32,19 +32,33 @@ public class Transform2D extends Component<RenderSystem2D> {
         setPosition(Vec2.add(getPosition(), vec));
     }
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 
-    public int getY() {
+    public int getXi() {
+        return Math.round(x);
+    }
+
+    public float getY() {
         return y;
     }
 
-    public int getActX() {
+    public int getYi() {
+        return Math.round(y);
+    }
+
+    public float getActX() {
         return x + xMod;
     }
-    public int getActY() {
+    public int getActXi() {
+        return Math.round(getActX());
+    }
+    public float getActY() {
         return y + yMod;
+    }
+    public int getActYi() {
+        return Math.round(getActY());
     }
 
     public void rollback() {

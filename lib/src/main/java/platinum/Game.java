@@ -22,6 +22,7 @@ public class Game {
 
     public <T extends System> void use(T system) {
         systems.add(system);
+        System.gamesMap.put(system, this);
         system.init(this);
     }
 

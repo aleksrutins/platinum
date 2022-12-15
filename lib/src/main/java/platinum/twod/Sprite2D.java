@@ -19,6 +19,6 @@ public class Sprite2D extends Component<RenderSystem2D> {
     @Override
     public void update(System system) {
         Transform2D transform = getComponent(Transform2D.class);
-        ((RenderSystem2D)system).graphics2D.drawImage(img, transform.getX(), transform.getY(), img.getWidth(), img.getHeight(), ((RenderSystem2D) system).clearColor, null);
+        ((RenderSystem2D)system).graphics2D.drawImage(img, transform.getActXi(), transform.getActYi(), img.getWidth(), img.getHeight(), ((RenderSystem2D) system).clearColor, null);
     }
 }
