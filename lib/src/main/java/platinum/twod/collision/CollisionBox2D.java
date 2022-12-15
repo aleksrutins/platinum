@@ -43,7 +43,6 @@ public class CollisionBox2D extends Component<RenderSystem2D> {
             var otherBoxes = system.getGame().getEntities().stream().filter(e -> e != this.entity && e.hasComponent(CollisionBox2D.class)).map(e -> e.getComponent(CollisionBox2D.class)).toList();
             for(var box : otherBoxes) {
                 if(box != null && box.type != CollisionType.PASS_THROUGH && box.type != CollisionType.DO_NOT_AVOID && overlaps(box)) {
-                    java.lang.System.out.println("Overlapping!");
                     while(overlaps(box)) transform.rollback();
                 }
             }
@@ -75,12 +74,9 @@ public class CollisionBox2D extends Component<RenderSystem2D> {
 
         // see https://gamedev.stackexchange.com/a/169234 and https://silentmatt.com/rectangle-intersection/
 
-        if(!(  thisTransform.getX() < (otherTransform.getX() + otherBox.width)
-               && (thisTransform.getX() + this.width) > otherTransform.getX()
-               && thisTransform.getY() < (otherTransform.getY() + otherBox.height)
-               && (thisTransform.getY() + this.height) > otherTransform.getY()
-        )) return false; // no collision
-
-        return true;
+        return thisTransform.getX() < (otherTransform.getX() + otherBox.width)
+            && (thisTransform.getX() + this.width) > otherTransform.getX()
+            && thisTransform.getY() < (otherTransform.getY() + otherBox.height)
+            && (thisTransform.getY() + this.height) > otherTransform.getY(); // no collision
     }
 }

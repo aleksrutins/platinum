@@ -32,10 +32,14 @@ public class Game {
 
     public <T extends Entity> void add(T entity) {
         entities.add(entity);
+        entity.init(systems);
     }
 
     public void addAll(Collection<Entity> entities) {
-        this.entities.addAll(entities);
+        for(Entity entity : entities) {
+            this.entities.add(entity);
+            entity.init(systems);
+        }
     }
 
     public void remove(Entity entity) {
