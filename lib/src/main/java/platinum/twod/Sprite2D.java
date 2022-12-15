@@ -9,6 +9,10 @@ import java.awt.image.BufferedImage;
 public class Sprite2D extends Component<RenderSystem2D> {
     BufferedImage img;
 
+    public BufferedImage getImage() {
+        return img;
+    }
+
     public Sprite2D(BufferedImage img) {
         this.img = img;
     }

@@ -3,7 +3,7 @@ package platinum.ecs;
 import java.lang.reflect.ParameterizedType;
 
 public abstract class Component<T extends System> {
-    Entity entity;
+    protected Entity entity;
     @SuppressWarnings({"unchecked"})
     Class<T> systemType = (Class<T>) ((ParameterizedType)this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     public boolean canUse(Class<? extends System> tS) {

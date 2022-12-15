@@ -7,6 +7,7 @@ import platinum.twod.CameraEntity2D;
 import platinum.twod.RenderSystem2D;
 import platinum.twod.Sprite2D;
 import platinum.twod.Transform2D;
+import platinum.twod.collision.CollisionBox2D;
 import platinum.twod.collision.CollisionType;
 import platinum.twod.level.*;
 
@@ -27,7 +28,7 @@ public class Main {
 
     var tilemapImg = ImageIO.read(Main.class.getResource("/platinum/example/tilemap.png"));
     var tiles = LevelLoader.load(new Level("main", new TileInfo[]{
-            new TileInfo(0, 15, 15, CollisionType.PASS_THROUGH),
+            new TileInfo(0, 15, 15, CollisionType.DO_NOT_AVOID),
             new TileInfo(1, 57, 57, CollisionType.PASS_THROUGH),
             new TileInfo(1, 98, 73, CollisionType.PASS_THROUGH)
     }, new LevelEntity[] {
@@ -42,6 +43,7 @@ public class Main {
                 var player = new Entity("player");
                 player.attach(transform);
                 player.attach(new Sprite2D(img));
+                player.attach(new CollisionBox2D(CollisionType.DO_NOT_AVOID, 32, 32));
                 yield player;
             }
             default -> null;
