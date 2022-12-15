@@ -77,8 +77,12 @@ public class Game {
         }
     }
 
-    public void mainLoop(Function<Game, Boolean> cb) {
+    public void mainLoop(Function<Game, Boolean> cb, int refreshRate) {
         var timer = new Timer("Platinum-MainLoop");
-        timer.scheduleAtFixedRate(new MainLoop(cb), 0, 17); // 60 frames per second
+        timer.scheduleAtFixedRate(new MainLoop(cb), 0, 1000 / refreshRate); // 60 frames per second
+    }
+
+    public void mainLoop(Function<Game, Boolean> cb) {
+        mainLoop(cb, java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getRefreshRate());
     }
 }
