@@ -1,7 +1,7 @@
-package platinum.extension;
+package platinum.extension
 
-import platinum.Game;
+import platinum.Game
 
-public interface GameExtension {
-  void connect(Game game);
+interface GameExtension {
+    fun connect(game: Game?)
 }

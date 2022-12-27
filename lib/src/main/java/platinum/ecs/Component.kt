@@ -1,20 +1,21 @@
-package platinum.ecs;
+package platinum.ecs
 
-import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.ParameterizedType
 
-public abstract class Component<T extends System> {
-    protected Entity entity;
-    @SuppressWarnings({"unchecked"})
-    Class<T> systemType = (Class<T>) ((ParameterizedType)this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-    public boolean canUse(Class<? extends System> tS) {
-        return tS == systemType;
+abstract class Component<T : System?> {
+    var entity: Entity? = null
+    var systemType = (this.javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0] as Class<*>
+    fun canUse(tS: Class<out System?>): Boolean {
+        return tS == systemType
     }
-    public abstract void init(System system);
-    public abstract void update(System system);
-    protected <C extends Component<?>> C getComponent(Class<C> type) {
-        return entity.getComponent(type);
+
+    abstract fun init(system: System?)
+    abstract fun update(system: System)
+    protected inline fun <reified C : Component<*>> getComponent(): C? {
+        return entity!!.getComponent()
     }
-    protected <C extends Component<?>> boolean hasComponent(Class<C> type) {
-        return entity.hasComponent(type);
+
+    protected inline fun <reified C : Component<*>> hasComponent(): Boolean {
+        return entity!!.hasComponent<C>()
     }
 }

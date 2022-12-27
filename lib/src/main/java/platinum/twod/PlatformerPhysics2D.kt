@@ -1,37 +1,29 @@
-package platinum.twod;
+package platinum.twod
 
-import platinum.ecs.Component;
-import platinum.ecs.System;
-import platinum.math.Vec2;
-import platinum.twod.collision.CollisionBox2D;
+import platinum.ecs.Component
+import platinum.ecs.System
+import platinum.math.Vec2
+import platinum.twod.collision.CollisionBox2D
 
-public class PlatformerPhysics2D extends Component<RenderSystem2D> {
-    final float fallSpeed = 0.05f;
-    final float jumpSpeed = 3f;
-
-    @Override
-    public void init(System system) {
-
-    }
-
-    @Override
-    public void update(System system) {
-        var collisionBox = getComponent(CollisionBox2D.class);
-        var transform = getComponent(Transform2D.class);
-        if(collisionBox == null || transform == null) {
-            return;
+class PlatformerPhysics2D : Component<RenderSystem2D?>() {
+    val fallSpeed = 0.05f
+    val jumpSpeed = 3f
+    override fun init(system: System?) {}
+    override fun update(system: System) {
+        val collisionBox = getComponent<CollisionBox2D>();
+        val transform = getComponent<Transform2D>();
+        if (collisionBox == null || transform == null) {
+            return
         }
-
-        if(collisionBox.hasCollision()) {
-            transform.delta = new Vec2(transform.delta.x(), 0);
+        if (collisionBox.hasCollision()) {
+            transform.delta = Vec2(transform.delta.x, 0f)
         } else {
-            transform.delta = Vec2.add(transform.delta, new Vec2(0, fallSpeed));
+            transform.delta = Vec2.Companion.add(transform.delta, Vec2(0f, fallSpeed))
         }
     }
 
-    public void jump() {
-        var transform = getComponent(Transform2D.class);
-        if(transform == null) return;
-        transform.delta = Vec2.add(transform.delta, new Vec2(0, -jumpSpeed));
+    fun jump() {
+        val transform = getComponent<Transform2D>() ?: return
+        transform.delta = Vec2.Companion.add(transform.delta, Vec2(0f, -jumpSpeed))
     }
 }

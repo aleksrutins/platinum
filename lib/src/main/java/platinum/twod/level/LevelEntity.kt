@@ -1,7 +1,4 @@
-package platinum.twod.level;
+package platinum.twod.level
 
-public record LevelEntity(
-    String name,
-    float x,
-    float y
-) {}
+data class LevelEntity(val name: String, val x: Float, val y: Float) {
+}

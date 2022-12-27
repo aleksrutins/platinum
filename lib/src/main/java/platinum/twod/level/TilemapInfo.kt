@@ -1,11 +1,5 @@
-package platinum.twod.level;
+package platinum.twod.level
 
-import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImage
 
-public record TilemapInfo(
-    BufferedImage image,
-    int rows,
-    int cols,
-    int tileWidth,
-    int tileHeight
-) {}
+class TilemapInfo(val image: BufferedImage, val rows: Int, val cols: Int, val tileWidth: Int, val tileHeight: Int)

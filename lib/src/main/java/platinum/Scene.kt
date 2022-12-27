@@ -1,17 +1,14 @@
-package platinum;
+package platinum
 
-import platinum.ecs.Entity;
+import platinum.ecs.Entity
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-public class Scene {
-    public List<Entity> entities = new ArrayList<>();
-    public void add(Entity entity) {
-        entities.add(entity);
+class Scene {
+    var entities: MutableList<Entity> = ArrayList()
+    fun add(entity: Entity) {
+        entities.add(entity)
     }
-    public void addAll(Collection<Entity> entities) {
-        this.entities.addAll(entities);
+
+    fun addAll(entities: Collection<Entity>) {
+        this.entities.addAll(entities)
     }
 }

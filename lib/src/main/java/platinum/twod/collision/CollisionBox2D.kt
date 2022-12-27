@@ -1,82 +1,65 @@
-package platinum.twod.collision;
+package platinum.twod.collision
 
-import platinum.ecs.Component;
-import platinum.ecs.System;
-import platinum.math.Vec2;
-import platinum.twod.RenderSystem2D;
-import platinum.twod.Sprite2D;
-import platinum.twod.Transform2D;
+import platinum.ecs.Component
+import platinum.ecs.System
+import platinum.math.Vec2
+import platinum.twod.RenderSystem2D
+import platinum.twod.Sprite2D
+import platinum.twod.Transform2D
 
-public class CollisionBox2D extends Component<RenderSystem2D> {
-    private RenderSystem2D system;
-    public CollisionType type;
-    public int width;
-    public int height;
-
-    public CollisionBox2D(CollisionType type, int width, int height) {
-        super();
-        this.type = type;
-        this.width = width;
-        this.height = height;
-    }
-
-    public CollisionBox2D(CollisionType type) {
-        this(type, -1, -1);
-    }
-
-    @Override
-    public void init(System system) {
-        this.system = (RenderSystem2D) system;
-
-        var sprite = getComponent(Sprite2D.class);
-        if(sprite != null && width < 0 && height < 0) {
-            width = sprite.getImage().getWidth();
-            height = sprite.getImage().getHeight();
+class CollisionBox2D @JvmOverloads constructor(var type: CollisionType, var width: Int = -1, var height: Int = -1) : Component<RenderSystem2D?>() {
+    private var system: RenderSystem2D? = null
+    override fun init(system: System?) {
+        this.system = system as RenderSystem2D?
+        val sprite = getComponent<Sprite2D>()
+        if (sprite != null && width < 0 && height < 0) {
+            width = sprite.image.width
+            height = sprite.image.height
         }
     }
 
-    @Override
-    public void update(System system) {
-        var transform = getComponent(Transform2D.class);
-        if(transform == null) return;
-        if(type == CollisionType.MOVABLE) {
-            var otherBoxes = system.getGame().getEntities().stream().filter(e -> e != this.entity && e.hasComponent(CollisionBox2D.class)).map(e -> e.getComponent(CollisionBox2D.class)).toList();
-            for(var box : otherBoxes) {
-                if(box != null && box.type != CollisionType.PASS_THROUGH && box.type != CollisionType.DO_NOT_AVOID && overlaps(box)) {
-                    while(overlaps(box)) transform.rollback();
+    override fun update(system: System) {
+        val transform = getComponent<Transform2D>() ?: return
+        if (type == CollisionType.MOVABLE) {
+            val otherBoxes = system.game!!.baseEntities.filter { it !== entity && it.hasComponent<CollisionBox2D>() }.map { it.getComponent<CollisionBox2D>() }
+            for (box in otherBoxes) {
+                if (box != null && box.type != CollisionType.PASS_THROUGH && box.type != CollisionType.DO_NOT_AVOID && overlaps(box)) {
+                    while (overlaps(box)) transform.rollback()
                 }
             }
         }
     }
 
-    public boolean hasCollision() {
-        if(system == null) return false;
-        var otherBoxes = system.getGame().getEntities().stream().filter(e -> e != this.entity && e.hasComponent(CollisionBox2D.class)).map(e -> e.getComponent(CollisionBox2D.class)).toList();
-        for(var box : otherBoxes) {
-            if(box != null && box.type != CollisionType.PASS_THROUGH && overlaps(box)) {
-                return true;
+    fun hasCollision(): Boolean {
+        if (system == null) return false
+        val otherBoxes = system!!.game!!.baseEntities.filter { it !== entity && it.hasComponent<CollisionBox2D>() }.map { it.getComponent<CollisionBox2D>() }
+        for (box in otherBoxes) {
+            if (box != null && box.type != CollisionType.PASS_THROUGH && overlaps(box)) {
+                return true
             }
         }
-        return false;
+        return false
     }
 
-    public boolean overlapsPoint(Vec2 point) {
-        var transform = getComponent(Transform2D.class);
-        if(transform == null) return false;
-        return (transform.getX() < point.x()) && (point.x() < transform.getX() + this.width) && (transform.getY() < point.y()) && (point.y() < transform.getY() + this.height);
+    fun overlapsPoint(point: Vec2): Boolean {
+        val transform = getComponent<Transform2D>() ?: return false
+        return transform.x < point.x && point.x < transform.x + width && transform.y < point.y && point.y < transform.y + height
     }
 
-    public boolean overlaps(CollisionBox2D otherBox) {
-        var thisTransform = getComponent(Transform2D.class);
-        var otherTransform = otherBox.getComponent(Transform2D.class);
-        if(thisTransform == null || otherTransform == null) return false;
-        if(otherBox == this) return false;
+    fun overlaps(otherBox: CollisionBox2D): Boolean {
+        val thisTransform = getComponent<Transform2D>() ?: return false
+        val otherTransform = otherBox.getComponent<Transform2D>() ?: return false
+        return (
+            if (otherBox === this)
+                false
+            else
+                thisTransform.x < otherTransform.x + otherBox.width
+                        && thisTransform.x + width > otherTransform.x
+                        && thisTransform.y < otherTransform.y + otherBox.height
+                        && thisTransform.y + height > otherTransform.y
+                )
 
         // see https://gamedev.stackexchange.com/a/169234 and https://silentmatt.com/rectangle-intersection/
-
-        return thisTransform.getX() < (otherTransform.getX() + otherBox.width)
-            && (thisTransform.getX() + this.width) > otherTransform.getX()
-            && thisTransform.getY() < (otherTransform.getY() + otherBox.height)
-            && (thisTransform.getY() + this.height) > otherTransform.getY(); // no collision
+        // no collision
     }
 }

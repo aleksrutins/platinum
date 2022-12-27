@@ -1,10 +1,13 @@
-package platinum.math;
+package platinum.math
 
-public record Vec2(float x, float y) {
-    public static Vec2 add(Vec2 a, Vec2 b) {
-        return new Vec2(a.x + b.x, a.y + b.y);
-    }
-    public static Vec2 lerp(Vec2 a, Vec2 b, float t) {
-        return new Vec2(Util.lerp(a.x, b.x, t), Util.lerp(a.y, b.y, t));
+data class Vec2(val x: Float, val y: Float) {
+    companion object {
+        fun add(a: Vec2?, b: Vec2): Vec2 {
+            return Vec2(a!!.x + b.x, a.y + b.y)
+        }
+
+        fun lerp(a: Vec2?, b: Vec2, t: Float): Vec2 {
+            return Vec2(Util.lerp(a!!.x, b.x, t), Util.lerp(a.y, b.y, t))
+        }
     }
 }

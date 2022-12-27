@@ -1,14 +1,15 @@
-package platinum.ecs;
+package platinum.ecs
 
-import java.util.HashMap;
+import platinum.Game
 
-import platinum.Game;
+interface System {
+    val game: Game?
+        get() = gamesMap[this]
 
-public interface System {
-    static HashMap<System, Game> gamesMap = new HashMap<>();
-    default Game getGame() {
-        return gamesMap.get(this);
+    fun init(game: Game?)
+    fun update()
+
+    companion object {
+        val gamesMap = HashMap<System, Game>()
     }
-    void init(Game game);
-    void update();
 }

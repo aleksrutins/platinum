@@ -1,10 +1,5 @@
-package platinum.twod.level;
+package platinum.twod.level
 
-import platinum.twod.collision.CollisionType;
+import platinum.twod.collision.CollisionType
 
-public record TileInfo(
-    int index,
-    float x,
-    float y,
-    CollisionType collisionType
-) {}
+class TileInfo(val index: Int, val x: Float, val y: Float, val collisionType: CollisionType)

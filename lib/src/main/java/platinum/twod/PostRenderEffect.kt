@@ -1,6 +1,6 @@
-package platinum.twod;
+package platinum.twod
 
-public interface PostRenderEffect {
-    void init(RenderSystem2D system);
-    void update(RenderSystem2D system);
+interface PostRenderEffect {
+    fun init(system: RenderSystem2D?)
+    fun update(system: RenderSystem2D?)
 }

@@ -1,7 +1,13 @@
-package platinum.twod.level;
+package platinum.twod.level
 
-public record Level(
-    String name,
-    TileInfo[] tiles,
-    LevelEntity[] entities
-) {}
+class Level(name: String, tiles: Array<TileInfo>, entities: Array<LevelEntity>) {
+    val name: String
+    val tiles: Array<TileInfo>
+    val entities: Array<LevelEntity>
+
+    init {
+        this.name = name
+        this.tiles = tiles
+        this.entities = entities
+    }
+}

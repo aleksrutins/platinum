@@ -1,25 +1,17 @@
-package platinum.twod;
+package platinum.twod
 
-import platinum.ecs.Component;
-import platinum.ecs.System;
+import platinum.ecs.Component
+import platinum.ecs.System
 
-public class Camera2D extends Component<RenderSystem2D> {
-
-    @Override
-    public void init(System system) {
-        
-    }
-
-    @Override
-    public void update(System system) {
-        if(!hasComponent(Transform2D.class)) return;
-        for(Transform2D transform : system.getGame().getEntities().stream()
-                                    .filter(e -> e.hasComponent(Transform2D.class))
-                                    .map(e -> e.getComponent(Transform2D.class))
-                                    .toList()) {
-            transform.xMod = 0 - getComponent(Transform2D.class).getX();
-            transform.yMod = 0 - getComponent(Transform2D.class).getY();
+class Camera2D : Component<RenderSystem2D?>() {
+    override fun init(system: System?) {}
+    override fun update(system: System) {
+        if (!hasComponent<Transform2D>()) return
+        for (transform in system.game!!.baseEntities
+                .filter { it.hasComponent<Transform2D>() }
+                .map { it.getComponent<Transform2D>()!! }) {
+            transform.xMod = 0 - getComponent<Transform2D>()!!.x
+            transform.yMod = 0 - getComponent<Transform2D>()!!.y
         }
     }
-    
 }

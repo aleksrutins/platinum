@@ -1,93 +1,85 @@
-package platinum;
+package platinum
 
-import platinum.ecs.Entity;
-import platinum.ecs.System;
-import platinum.extension.GameExtension;
+import platinum.ecs.Entity
+import platinum.ecs.System
+import platinum.extension.GameExtension
+import java.awt.GraphicsEnvironment
+import java.util.*
+import java.util.function.Consumer
 
-import java.util.*;
-import java.util.function.Function;
-
-public class Game {
-    private List<System> systems = new ArrayList<>();
-    private List<Entity> entities = new ArrayList<>();
-    private Scene scene = null;
-    public List<Entity> getEntities() {
-        var result = new ArrayList<Entity>();
-        result.addAll(entities);
-        if(scene != null) {
-            result.addAll(scene.entities);
+open class Game {
+    val systems: MutableList<System> = ArrayList()
+    val baseEntities: MutableList<Entity> = ArrayList()
+    private var scene: Scene? = null
+    fun getEntities(): List<Entity> {
+        val result = ArrayList<Entity>()
+        result.addAll(baseEntities)
+        if (scene != null) {
+            result.addAll(scene!!.entities)
         }
-        return result;
+        return result
     }
 
-    public <T extends System> void use(T system) {
-        systems.add(system);
-        System.gamesMap.put(system, this);
-        system.init(this);
+    fun <T : System> use(system: T) {
+        systems.add(system)
+        System.gamesMap[system] = this
+        system.init(this)
     }
 
-    public <T extends GameExtension> void useExt(T extension) {
-        extension.connect(this);
+    fun <T : GameExtension> useExt(extension: T) {
+        extension.connect(this)
     }
 
-    public <T extends Entity> void add(T entity) {
-        entities.add(entity);
-        entity.init(systems);
+    fun <T : Entity> add(entity: T) {
+        baseEntities.add(entity)
+        entity.init(systems)
     }
 
-    public void addAll(Collection<Entity> entities) {
-        for(Entity entity : entities) {
-            this.entities.add(entity);
-            entity.init(systems);
-        }
-    }
-
-    public void remove(Entity entity) {
-        entities.remove(entity);
-        if(scene != null) scene.entities.remove(entity);
-    }
-
-    public void clear() {
-        entities.clear();
-    }
-
-    public void switchScene(Scene scene) {
-        this.scene = scene;
-    }
-
-    private void updateAll() {
-        systems.forEach(System::update);
-    }
-
-    @SuppressWarnings({"unchecked"})
-    public <T extends Entity> Optional<T> get(Class<T> t, String name) {
-        return (Optional<T>) entities.stream().filter(e -> t.isAssignableFrom(e.getClass()) && e.getName().equals(name)).findFirst();
-    }
-
-    @SuppressWarnings({"unchecked"})
-    public <T extends System> Optional<T> getSystem(Class<T> t) {
-        return (Optional<T>) systems.stream().filter(e -> t.isAssignableFrom(e.getClass())).findFirst();
-    }
-
-    protected class MainLoop extends TimerTask {
-        private final Function<Game, Boolean> cb;
-        public MainLoop(Function<Game, Boolean> cb) {
-            this.cb = cb;
-        }
-        @Override
-        public void run() {
-            boolean shouldContinue = cb.apply(Game.this);
-            updateAll();
-            if(!shouldContinue) cancel();
+    fun addAll(entities: Collection<Entity>) {
+        for (entity in entities) {
+            this.baseEntities.add(entity)
+            entity.init(systems)
         }
     }
 
-    public void mainLoop(Function<Game, Boolean> cb, int refreshRate) {
-        var timer = new Timer("Platinum-MainLoop");
-        timer.scheduleAtFixedRate(new MainLoop(cb), 0, 1000 / refreshRate); // 60 frames per second
+    fun remove(entity: Entity?) {
+        baseEntities.remove(entity)
+        if (scene != null) scene!!.entities.remove(entity)
     }
 
-    public void mainLoop(Function<Game, Boolean> cb) {
-        mainLoop(cb, java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getRefreshRate());
+    fun clear() {
+        baseEntities.clear()
+    }
+
+    fun switchScene(scene: Scene?) {
+        this.scene = scene
+    }
+
+    private fun updateAll() {
+        systems.forEach(Consumer { obj: System -> obj.update() })
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    inline operator fun <reified T : Entity> get(name: String): T? {
+        return baseEntities.firstOrNull { e -> T::class.java.isAssignableFrom(e.javaClass) && e.name == name } as T?
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    inline fun <reified T : System?> getSystem(): T? {
+        return systems.firstOrNull { e: System -> T::class.java.isAssignableFrom(e.javaClass) } as T?
+    }
+
+    protected inner class MainLoop(private val cb: (Game) -> Boolean) : TimerTask() {
+        override fun run() {
+            val shouldContinue = cb(this@Game)
+            updateAll()
+            if (!shouldContinue) cancel()
+        }
+    }
+
+    @JvmOverloads
+    fun mainLoop(refreshRate: Int = GraphicsEnvironment.getLocalGraphicsEnvironment().defaultScreenDevice.displayMode.refreshRate, cb: (Game) -> Boolean) {
+        val timer = Timer("Platinum-MainLoop")
+        timer.scheduleAtFixedRate(MainLoop(cb), 0, (1000 / refreshRate).toLong()) // 60 frames per second
     }
 }

@@ -1,45 +1,37 @@
-package platinum.twod;
+package platinum.twod
 
-import platinum.Game;
-import platinum.ecs.System;
+import platinum.Game
+import platinum.ecs.Entity
+import platinum.ecs.System
+import java.awt.Color
+import java.awt.Graphics
+import java.awt.Graphics2D
+import java.util.function.Consumer
+import javax.swing.JComponent
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collection;
-
-public class RenderSystem2D extends JComponent implements System {
-    private Game game;
-
-    public Color clearColor = Color.BLACK;
-
-    public Graphics2D graphics2D;
-
-    private Collection<PostRenderEffect> effects = new ArrayList<>();
-
-    public void addEffect(PostRenderEffect effect) {
-        effects.add(effect);
+class RenderSystem2D : JComponent(), System {
+    var clearColor = Color.BLACK
+    var graphics2D: Graphics2D? = null
+    private val effects: MutableCollection<PostRenderEffect> = ArrayList()
+    fun addEffect(effect: PostRenderEffect) {
+        effects.add(effect)
     }
 
-    @Override
-    public void paint(Graphics g) {
-        var g2d = (Graphics2D)g;
-        graphics2D = g2d;
-        var bounds = g2d.getDeviceConfiguration().getBounds();
-        g2d.setBackground(clearColor);
-        g2d.clearRect(0, 0, bounds.width, bounds.height);
-        game.getEntities().forEach(entity -> entity.update(this));
-        effects.forEach(e -> e.update(this));
+    override fun paint(g: Graphics) {
+        val g2d = g as Graphics2D
+        graphics2D = g2d
+        val bounds = g2d.deviceConfiguration.bounds
+        g2d.background = clearColor
+        g2d.clearRect(0, 0, bounds.width, bounds.height)
+        game!!.baseEntities.forEach(Consumer { entity: Entity? -> entity!!.update(this) })
+        effects.forEach(Consumer { e: PostRenderEffect -> e.update(this) })
     }
 
-    @Override
-    public void init(Game game) {
-        this.game = game;
-        effects.forEach(e -> e.init(this));
+    override fun init(game: Game?) {
+        effects.forEach(Consumer { e: PostRenderEffect -> e.init(this) })
     }
 
-    @Override
-    public void update() {
-        repaint();
+    override fun update() {
+        repaint()
     }
 }

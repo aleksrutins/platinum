@@ -1,38 +1,31 @@
-package platinum.input;
+package platinum.input
 
-import java.util.HashSet;
-import java.util.Set;
+import java.awt.Component
+import java.awt.event.KeyEvent
+import java.awt.event.KeyListener
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+class KeyboardManager(thingy: Component) {
+    private val keys: MutableSet<Int> = HashSet()
 
-public class KeyboardManager {
-    public KeyboardManager(java.awt.Component thingy) {
-        thingy.addKeyListener(new Listener());
+    init {
+        thingy.addKeyListener(Listener())
     }
 
-    private Set<Integer> keys = new HashSet<>();
-
-    private class Listener implements KeyListener {
-
-        @Override
-        public void keyPressed(KeyEvent evt) {
-            keys.add(evt.getKeyCode());
+    private inner class Listener : KeyListener {
+        override fun keyPressed(evt: KeyEvent) {
+            keys.add(evt.keyCode)
         }
 
-        @Override
-        public void keyReleased(KeyEvent evt) {
-            keys.remove(evt.getKeyCode());
+        override fun keyReleased(evt: KeyEvent) {
+            keys.remove(evt.keyCode)
         }
 
-        @Override
-        public void keyTyped(KeyEvent evt) {
+        override fun keyTyped(evt: KeyEvent) {
             // Not used
         }
-
     }
 
-    public boolean isDown(int keyCode) {
-        return keys.contains(keyCode);
+    fun isDown(keyCode: Int): Boolean {
+        return keys.contains(keyCode)
     }
 }

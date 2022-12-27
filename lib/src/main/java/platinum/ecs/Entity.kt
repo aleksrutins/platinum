@@ -1,60 +1,46 @@
-package platinum.ecs;
+package platinum.ecs
 
-import java.util.ArrayList;
-import java.util.List;
+open class Entity(val name: String) {
+    val components: MutableList<Component<*>> = ArrayList()
 
-public class Entity {
-    private List<Component<?>> components = new ArrayList<>();
-    private String name;
-    public String getName() {
-        return name;
-    }
-    public Entity(String name) {
-        this.name = name;
-    }
-    public void attach(Component<?> component) {
-        components.add(component);
-        component.entity = this;
+    fun attach(component: Component<*>) {
+        components.add(component)
+        component.entity = this
     }
 
-    public boolean detach(Component<?> component) {
-        component.entity = null;
-        return components.remove(component);
+    fun detach(component: Component<*>): Boolean {
+        component.entity = null
+        return components.remove(component)
     }
 
-    public void detachAll(Class<? extends Component<?>> clazz) {
-        for (Component<?> component : components) {
-            if(clazz.isAssignableFrom(component.getClass())) detach(component);
+    fun detachAll(clazz: Class<out Component<*>?>) {
+        for (component in components) {
+            if (clazz.isAssignableFrom(component.javaClass)) detach(component)
         }
     }
 
-    @SuppressWarnings({"unchecked"})
-    public <T extends Component<?>> T getComponent(Class<T> type) {
-        for (Component<?> component : components) {
-            if(component.getClass() == type) return (T)component;
+    inline fun <reified T : Component<*>> getComponent(): T? {
+        for (component in components) {
+            if (component.javaClass == T::class.java) return component as T
         }
-        return null;
+        return null
     }
 
-    public List<Component<?>> getComponents() {
-        return components;
+    inline fun <reified T : Component<*>> hasComponent(): Boolean {
+        return getComponent<T>() != null
     }
 
-    public boolean hasComponent(Class<? extends Component<?>> type) {
-        return getComponent(type) != null;
-    }
-
-    public void init(List<System> systems) {
-        for (Component<?> component : components) {
-            for (System system : systems) {
-                if(component.canUse(system.getClass())) component.init(system);
+    fun init(systems: List<System>) {
+        for (component in components) {
+            for (system in systems) {
+                if (component.canUse(system.javaClass)) component.init(system)
             }
         }
     }
 
-    public void update(System system) {
-        for (Component<?> component : components) {
-            if(component.canUse(system.getClass())) component.update(system);
+    fun update(system: System) {
+        for (component in components) {
+            if (component.canUse(system.javaClass)) component.update(system)
         }
     }
 }
