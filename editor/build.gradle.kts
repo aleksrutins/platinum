@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("application")
-    kotlin("jvm") version "1.8.0-RC2"
+    kotlin("jvm") version "2.2.21"
 }
 
 dependencies {
@@ -15,12 +15,4 @@ application {
 }
 repositories {
     mavenCentral()
-}
-val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions {
-    jvmTarget = "1.8"
-}
-val compileTestKotlin: KotlinCompile by tasks
-compileTestKotlin.kotlinOptions {
-    jvmTarget = "1.8"
 }

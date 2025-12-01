@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     // Apply the java-library plugin for API and implementation separation.
     id("java-library")
-    kotlin("jvm") version "1.8.0-RC2"
+    kotlin("jvm") version "2.2.21"
 }
 
 repositories {
@@ -30,11 +30,6 @@ tasks.named<Test>("test") {
     useJUnitPlatform()
 }
 
-val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions {
-    jvmTarget = "1.8"
-}
-val compileTestKotlin: KotlinCompile by tasks
-compileTestKotlin.kotlinOptions {
-    jvmTarget = "1.8"
+kotlin {
+    jvmToolchain(21)
 }
