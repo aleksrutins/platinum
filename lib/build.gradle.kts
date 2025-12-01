@@ -21,8 +21,8 @@ repositories {
 
 dependencies {
     // Use JUnit Jupiter for testing.
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.1")
-    implementation(kotlin("stdlib-jdk8"))
+    testImplementation("org.jetbrains.kotlin:kotlin-test")
+    testImplementation("org.junit.platform:junit-platform-launcher")
 }
 
 tasks.named<Test>("test") {
